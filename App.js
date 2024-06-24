@@ -71,7 +71,7 @@ export default function App() {
     <NavigationContainer>
       <nstack.Navigator initialRouteName = 'login'>
         <nstack.Screen name = 'login' component = {Loginscreen} options = {{headerShown: false}} />
-      <nstack.Screen name = 'details' component={Details} options = {{
+        <nstack.Screen name = 'details' component={Details} options = {{
           title: 'Settings',
           headerShown : true,
           headerTintColor:'green',
