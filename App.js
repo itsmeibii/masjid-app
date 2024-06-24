@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import Loginscreen from './loginscreen';
 
 function Mainnav () {
   const styles = StyleSheet.create({
@@ -68,7 +69,8 @@ export default function App() {
   
   return (
     <NavigationContainer>
-      <nstack.Navigator initialRouteName = 'nav'>
+      <nstack.Navigator initialRouteName = 'login'>
+        <nstack.Screen name = 'login' component = {Loginscreen} options = {{headerShown: false}} />
       <nstack.Screen name = 'details' component={Details} options = {{
           title: 'Settings',
           headerShown : true,
