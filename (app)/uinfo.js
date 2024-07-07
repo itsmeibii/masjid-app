@@ -38,7 +38,7 @@ export default function Uinfo(props) {
 
   return (
     <View style = {styles.info}>
-      <Image source = {require('./assets/pfp.png')} style = {styles.pfp} />
+      <Image source = {require('../assets/pfp.png')} style = {styles.pfp} />
       <View style = {styles.details.container} >
     <Text style = {styles.details.name}>{props.name}</Text>
       </View>

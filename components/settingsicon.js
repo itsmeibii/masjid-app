@@ -13,7 +13,7 @@ export default function Settingsicon() {
     })
   return (
     <TouchableOpacity onPress = {() => navigationn.navigate('details')}>
-            <Image source = {require('./assets/settingsicon.png')} style = {styles.settings}/>
+            <Image source = {require('../assets/settingsicon.png')} style = {styles.settings}/>
           </TouchableOpacity>
   )
 }

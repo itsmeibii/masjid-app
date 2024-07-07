@@ -1,4 +1,4 @@
-import HijriJS from "./Hijri";
+import HijriJS from "../assets/Hijri";
 import {View, Text, StyleSheet} from 'react-native'
 import Settingsicon from './settingsicon';
 export default function Hheader(props) {
