@@ -5,14 +5,15 @@ import * as SplashScreen from 'expo-splash-screen';
 import UserInput from '../components/input';
 import EmailIconImport from 'react-native-vector-icons/MaterialCommunityIcons'
 import PassIconImport from 'react-native-vector-icons/Foundation'
-
+import ConfPassIconImport from 'react-native-vector-icons/Feather'
 
 SplashScreen.preventAutoHideAsync();
 
-export default function Loginscreen({navigation}) {
+export default function SignupScreen({navigation}) {
     const einputref = useRef();
     const pinputref = useRef();
     const emailRef = useRef("");
+    const cpasswordRef = useRef("");
     const passwordRef = useRef("");
     const [loading, setLoading] = useState(false);
     const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -24,16 +25,13 @@ export default function Loginscreen({navigation}) {
         setFontsLoaded(true);
     };
 
-    const handleLogin = () => {
+    const handleSignup = () => {
         if (!emailRef.current) {
             einputref.current.focus();
             Alert.alert('Please enter an email');
         } else if (!passwordRef.current) {
             pinputref.current.focus();
             Alert.alert('Please enter a password')
-        } else if (emailRef.current.length < 4 || (emailRef.current.slice(-4) !== '.com' || !emailRef.current.includes('@'))) {
-            einputref.current.focus();
-            Alert.alert("Please enter a valid email address")
         }
         setLoading(true);
         setTimeout(() => {
@@ -45,7 +43,10 @@ export default function Loginscreen({navigation}) {
     useEffect(() => {
         getFonts().then(() => {
             SplashScreen.hideAsync();
-        })
+        }).catch(() => {
+            // Handle font loading error
+            // Alert.alert('Default Font Replaced');
+        });
     }, []);
 
     const styles = StyleSheet.create({
@@ -55,7 +56,7 @@ export default function Loginscreen({navigation}) {
             alignItems: 'center',
             width: '100%'
         }, 
-        login_button : {
+        signup_button : {
             height: 70,
             width: '90%',
             backgroundColor: '#2DE371',
@@ -64,7 +65,7 @@ export default function Loginscreen({navigation}) {
             borderRadius: '25%',
         },
         title: {
-            flex: 0.2,
+            flex: 0.25,
             alignItems: 'center',
             width: '100%',
             marginBottom: 0,
@@ -103,11 +104,11 @@ export default function Loginscreen({navigation}) {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.title}>
-                <Text style={{ fontSize: 50, paddingTop: 30,  fontWeight: 'bold' }}>Login</Text>  
+                <Text style={{ fontSize: 50, paddingTop: 30,  fontWeight: 'bold' }}>Sign Up</Text>  
             </View>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <>
-            <Image source = {require('../assets/loginpv.png')} style = {{height: 300, width: 300, marginBottom: 30,}} />
+            <Image source = {require('../assets/loginpv.png')} style = {{height: 250, width: 250, marginBottom:90,}} />
                 <View style={styles.login_input}>
                 
                     <UserInput onChangeText = {(text) => emailRef.current = text} placeholder='Email' ref = {einputref} icon = {(props) => {
@@ -116,26 +117,27 @@ export default function Loginscreen({navigation}) {
                     <UserInput   onChangeText = {(text) => passwordRef.current = text} placeholder='Password' ref = {pinputref} show = {false} icon = {(props) => {
                         return <PassIconImport name = 'key' {...props} />
                     }}/>
-                    <View style = {styles.forgot_password} >
-                    <Text style = {{fontWeight: 'bold', color: 'grey'}}>Forgot Password?</Text>
-                    </View>
+                    <UserInput   onChangeText = {(text) => cpasswordRef.current = text} placeholder='Confirm Password' ref = {pinputref} show = {false} icon = {(props) => {
+                        return <ConfPassIconImport name = 'lock' {...props} />
+                    }}/>
+                    
                     
                     {loading ? (
                         <ActivityIndicator size="small" color="#2DE371" />
                     ) : (
                         
 
-                        <TouchableOpacity style = {{width: '100%', justifyContent: 'center', alignItems: 'center', }} onPress = {() => handleLogin()} >
-                            <View style = {styles.login_button}>
-                                 <Text style = {{fontSize: 30, color: 'white', fontWeight: 900,}}> Login </Text>
+                        <TouchableOpacity style = {{width: '100%', justifyContent: 'center', alignItems: 'center', }} onPress = {() => handleSignup()} >
+                            <View style = {styles.signup_button}>
+                                 <Text style = {{fontSize: 30, color: 'white', fontWeight: 900,}}> Register </Text>
                             </View>
                         </TouchableOpacity>
                         
                     )}
                     <View style = {styles.signup}>
-                        <Text style = {{fontSize: 15,}}> New Here? </Text> 
-                        <Pressable onPress = {() => navigation.navigate('signup')}>
-                        <Text style = {{fontWeight: 'bold', color: 'darkgreen', fontSize: 15,}}> Sign up! </Text>
+                        <Text style = {{fontSize: 15,}}> Already have an account? </Text> 
+                        <Pressable onPress = {() => navigation.navigate('login')}>
+                        <Text style = {{fontWeight: 'bold', color: 'darkgreen', fontSize: 15,}}> Login! </Text>
                         </Pressable>
                     </View>
                 </View>

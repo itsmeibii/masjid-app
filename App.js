@@ -15,6 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Loginscreen from './(app)/loginscreen';
 import { AuthContextProvider, useAuth } from './context/AuthContext';
+import SignupScreen from './(app)/signupscreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -83,6 +84,7 @@ function RootNavigator() {
   return (
     <Stack.Navigator initialRouteName='login'>
       <Stack.Screen name='login' component={Loginscreen} options={{ headerShown: false }} />
+      <Stack.Screen name = 'signup' component={SignupScreen} options = {{headerShown: false}} />
       <Stack.Screen 
         name='details' 
         component={Details} 

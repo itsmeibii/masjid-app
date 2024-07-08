@@ -20,6 +20,11 @@ const UserInput = forwardRef(({ uinfo = false,show = true,icon: IconComponent = 
       flex: 1,
       marginLeft: 10,
       fontWeight: 'bold',
+      borderLeftColor: 'rgba(0,0,0,0.3)',
+      borderLeftWidth: 1,
+      paddingLeft: 15,
+      height: '50%',
+      width: '30%'
       
     },
   });
