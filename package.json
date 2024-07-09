@@ -18,6 +18,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "@rneui/themed": "^4.0.0-rc.8",
+    "bcryptjs": "^2.4.3",
     "expo": "~51.0.14",
     "expo-app-loading": "^2.1.1",
     "expo-firebase": "^0.0.0-alpha.0",
