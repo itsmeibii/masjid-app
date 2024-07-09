@@ -6,12 +6,15 @@ import UserInput from '../components/input';
 import EmailIconImport from 'react-native-vector-icons/MaterialCommunityIcons'
 import PassIconImport from 'react-native-vector-icons/Foundation'
 import ConfPassIconImport from 'react-native-vector-icons/Feather'
+import { useAuth } from '../context/AuthContext';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function SignupScreen({navigation}) {
+    const {register} = useAuth
     const einputref = useRef();
     const pinputref = useRef();
+    const cpinputref = useRef();
     const emailRef = useRef("");
     const cpasswordRef = useRef("");
     const passwordRef = useRef("");
@@ -25,7 +28,7 @@ export default function SignupScreen({navigation}) {
         setFontsLoaded(true);
     };
 
-    const handleSignup = () => {
+    const handleSignup =  async () => {
         if (!emailRef.current) {
             einputref.current.focus();
             Alert.alert('Please enter an email');
@@ -33,11 +36,7 @@ export default function SignupScreen({navigation}) {
             pinputref.current.focus();
             Alert.alert('Please enter a password')
         }
-        setLoading(true);
-        setTimeout(() => {
-            setLoading(false);
-        },1000)
-        // Handle login process
+        navigation.navigate('signupextras')
     };
 
     useEffect(() => {
@@ -117,7 +116,7 @@ export default function SignupScreen({navigation}) {
                     <UserInput   onChangeText = {(text) => passwordRef.current = text} placeholder='Password' ref = {pinputref} show = {false} icon = {(props) => {
                         return <PassIconImport name = 'key' {...props} />
                     }}/>
-                    <UserInput   onChangeText = {(text) => cpasswordRef.current = text} placeholder='Confirm Password' ref = {pinputref} show = {false} icon = {(props) => {
+                    <UserInput   onChangeText = {(text) => cpasswordRef.current = text} placeholder='Confirm Password' ref = {cpinputref} show = {false} icon = {(props) => {
                         return <ConfPassIconImport name = 'lock' {...props} />
                     }}/>
                     

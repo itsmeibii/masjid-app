@@ -24,7 +24,7 @@ const UserInput = forwardRef(({ uinfo = false,show = true,icon: IconComponent = 
       borderLeftWidth: 1,
       paddingLeft: 15,
       height: '50%',
-      width: '30%'
+      width: '30%' //try changing flex
       
     },
   });

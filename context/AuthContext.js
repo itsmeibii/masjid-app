@@ -46,9 +46,9 @@ export const AuthContextProvider = ({children}) => {
     const register = async (email,password, firstName, lastName ,age,state , city, phoneNumber ) => {
       try {
         const response = await createUserWithEmailAndPassword(auth, email, password);
-        const user = response.user;
+        const user = response?.user;
         const hashedp = await hashPassword(password);
-        await setDoc(doc(db,'users',user.uid), {
+        await setDoc(doc(db,'users',user?.uid), {
           email: user.email,
           password: hashedp,
           "first-name" : firstName,
@@ -58,8 +58,18 @@ export const AuthContextProvider = ({children}) => {
           state,
           city,
         }) 
+        return {success: true, data: user};
       } catch (error) {
-        
+        if (error.code == 'auth/email-already-exists') {
+          Alert.alert("Email already in use. Try loggin in");
+        } else if (error.code == "auth/internal-error") {
+          Alert.alert("Internal Error")
+        } else if (error.code.slice(0,12) == 'auth/invalid') {
+          Alert.alert("Invalid Credentials");
+        } else {
+          Alert.alert("Error. Code: " + error.code);
+        }
+        return {success: false, data: null};
       }
     }
   return (

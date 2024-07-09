@@ -16,6 +16,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Loginscreen from './(app)/loginscreen';
 import { AuthContextProvider, useAuth } from './context/AuthContext';
 import SignupScreen from './(app)/signupscreen';
+import SignupExtras from './(app)/signupextras';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -72,19 +73,20 @@ function RootNavigator() {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigation.navigate('nav');
-    } else {
-      navigation.navigate('login');
-    }
-  }, [isAuthenticated, navigation]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     navigation.navigate('nav');
+  //   } else {
+  //     navigation.navigate('login');
+  //   }
+  // }, [isAuthenticated, navigation]);
 
 
   return (
-    <Stack.Navigator initialRouteName='login'>
-      <Stack.Screen name='login' component={Loginscreen} options={{ headerShown: false }} />
-      <Stack.Screen name = 'signup' component={SignupScreen} options = {{headerShown: false}} />
+    <Stack.Navigator initialRouteName='signupextras'>
+      <Stack.Screen name='login' component={Loginscreen} options={{ headerShown: false, }} />
+      <Stack.Screen name = 'signup' component={SignupScreen} options = {{headerShown: false,}} />
+      <Stack.Screen name = 'signupextras' component={SignupExtras} options = {{headerShown: false, /*presentation: 'card', gestureEnabled: true false*/}} />
       <Stack.Screen 
         name='details' 
         component={Details} 
