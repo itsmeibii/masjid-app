@@ -2,10 +2,11 @@ import { SafeAreaView, StyleSheet, Text, View , Image} from 'react-native'
 import React from 'react'
 import UserInput from '../components/input'
 
-const SignupExtras = () => {
+
+export const UserInfoName = ({navigation}) => {
     const styles = StyleSheet.create({
         title: {
-            marginTop: 20,
+            marginTop: 10,
             fontSize: 35,
             textAlign: 'left',
             
@@ -46,5 +47,5 @@ const SignupExtras = () => {
   )
 }
 
-export default SignupExtras
+
 

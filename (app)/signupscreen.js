@@ -7,10 +7,27 @@ import EmailIconImport from 'react-native-vector-icons/MaterialCommunityIcons'
 import PassIconImport from 'react-native-vector-icons/Foundation'
 import ConfPassIconImport from 'react-native-vector-icons/Feather'
 import { useAuth } from '../context/AuthContext';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { UserInfoName } from './signupextras';
+
 
 SplashScreen.preventAutoHideAsync();
 
-export default function SignupScreen({navigation}) {
+export default SignUpNavigator = () => {
+  const styles = StyleSheet.create({
+    
+  })
+  const {Navigator, Screen} = createNativeStackNavigator();
+  return (
+    <Navigator initialRouteName = "signup">
+      <Screen name = "signup" component = {SignupScreen} options = {{headerShown : false}} />
+      <Screen name = "nameinfo" component =  {UserInfoName} options = {{headerShown : false, presentation: 'card', gestureEnabled: true}} />
+    </Navigator>
+  )
+
+}
+
+function SignupScreen({navigation}) {
     const {register} = useAuth
     const einputref = useRef();
     const pinputref = useRef();
@@ -36,7 +53,7 @@ export default function SignupScreen({navigation}) {
             pinputref.current.focus();
             Alert.alert('Please enter a password')
         }
-        navigation.navigate('signupextras')
+        navigation.navigate('nameinfo')
     };
 
     useEffect(() => {
@@ -126,7 +143,7 @@ export default function SignupScreen({navigation}) {
                     ) : (
                         
 
-                        <TouchableOpacity style = {{width: '100%', justifyContent: 'center', alignItems: 'center', }} onPress = {() => navigation.navigate('signupextras')} >
+                        <TouchableOpacity style = {{width: '100%', justifyContent: 'center', alignItems: 'center', }} onPress = {() => navigation.navigate("nameinfo")} >
                             <View style = {styles.signup_button}>
                                  <Text style = {{fontSize: 30, color: 'white', fontWeight: 900,}}> Register </Text>
                             </View>
