@@ -5,7 +5,7 @@ import UserInput from '../components/input'
 const SignupExtras = () => {
     const styles = StyleSheet.create({
         title: {
-            marginTop: 10,
+            marginTop: 20,
             fontSize: 35,
             textAlign: 'left',
             
