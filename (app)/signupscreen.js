@@ -126,7 +126,7 @@ export default function SignupScreen({navigation}) {
                     ) : (
                         
 
-                        <TouchableOpacity style = {{width: '100%', justifyContent: 'center', alignItems: 'center', }} onPress = {() => handleSignup()} >
+                        <TouchableOpacity style = {{width: '100%', justifyContent: 'center', alignItems: 'center', }} onPress = {() => navigation.navigate('signupextras')} >
                             <View style = {styles.signup_button}>
                                  <Text style = {{fontSize: 30, color: 'white', fontWeight: 900,}}> Register </Text>
                             </View>

@@ -83,7 +83,7 @@ function RootNavigator() {
 
 
   return (
-    <Stack.Navigator initialRouteName='signupextras'>
+    <Stack.Navigator initialRouteName='signup'>
       <Stack.Screen name='login' component={Loginscreen} options={{ headerShown: false, }} />
       <Stack.Screen name = 'signup' component={SignupScreen} options = {{headerShown: false,}} />
       <Stack.Screen name = 'signupextras' component={SignupExtras} options = {{headerShown: false, /*presentation: 'card', gestureEnabled: true false*/}} />
