@@ -1,29 +1,19 @@
-import { SafeAreaView, StyleSheet, Text, View , Image, Keyboard, Button, TouchableOpacity} from 'react-native';
-import React, { useState, useEffect } from 'react';
-import UserInput from '../components/input';
-import * as Font from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen'
+import {    TouchableOpacity, SafeAreaView,StyleSheet, Text, View, Image, Button } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StatusBar } from 'expo-status-bar'
+import * as Font from 'expo-font'
 import Check from 'react-native-vector-icons/Octicons'
 import Back from 'react-native-vector-icons/Feather'
-import DateTimePickerModal from 'react-native-modal-datetime-picker'
-import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen'
+import  Picker  from 'react-native-picker-select'
 
-
-const UserInfoAge = ({navigation}) => {
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
+const UserInfoState = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState();
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const showDatePicker = () => {
-    setDatePickerVisible(true);
-  };
   
-  const hideDatePicker = () => {
-    setDatePickerVisible(false);
-  };
-  const handleConfirm = (date) => {
-    setSelectedDate(date);
-    hideDatePicker();
-  };
+  
+  
+  
   const getFonts = async () => {
     await Font.loadAsync({
       Beiruti: require('../assets/fonts/Beiruti.ttf'),
@@ -38,7 +28,7 @@ const UserInfoAge = ({navigation}) => {
   }, []);
     const styles = StyleSheet.create({
         title: {
-            marginTop: 10,
+            marginTop: 30,
             fontSize: 35,
             textAlign: 'left',
             
@@ -87,24 +77,24 @@ const UserInfoAge = ({navigation}) => {
     <SafeAreaView style = {{alignItems: 'center', flex: 1, width: '100%'}} >
       <StatusBar style = "dark" />
         
-        <Text style = {styles.title} >When does the cake come out?</Text>
+        <Text style = {styles.title} >Last Bit...</Text>
         
         <Image source = {require('../assets/cake.png')} style = {{height: 200, width: 200, marginVertical: 40,}} />
         
         <View style = {styles.container}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 20 }}>
-        {selectedDate ? selectedDate.toLocaleDateString() : 'No date selected'}
-        </Text>
-        <Button title = "Set Birthday" onPress = {showDatePicker} />
-        <DateTimePickerModal
-        date={selectedDate || new Date()}
-        isVisible={datePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-        />
+        
+        <Button title = "Set Birthday" />
+        <Picker
+      onValueChange={(value) => console.log(value)}
+      items={[
+        { label: 'Football', value: 'football' },
+        { label: 'Baseball', value: 'baseball' },
+        { label: 'Hockey', value: 'hockey' },
+      ]}
+    />
+        
         <View style = {styles.submit}>
-        <TouchableOpacity onPress = {() => selectedDate ? navigation.navigate("nameinfo") : Alert.alert("Please enter a birthdate")}>
+        <TouchableOpacity >
         <Back name = 'arrow-left-circle' size = {50} style = {{color: 'black', }} />
         </TouchableOpacity>
         <TouchableOpacity onPress = {() => navigation.navigate("stateinfo")} >
@@ -119,5 +109,5 @@ const UserInfoAge = ({navigation}) => {
   )
 }
 
-export default UserInfoAge
+export default UserInfoState;
 

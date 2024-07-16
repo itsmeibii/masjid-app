@@ -6,6 +6,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import Check from 'react-native-vector-icons/Octicons'
 import Back from 'react-native-vector-icons/Feather'
 import Person from 'react-native-vector-icons/FontAwesome6'
+import { StatusBar } from 'expo-status-bar';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -86,7 +87,7 @@ export const UserInfoName = ({navigation}) => {
   return (
     
     <SafeAreaView style = {{alignItems: 'center', flex: 1, width: '100%'}} >
-        
+        <StatusBar style = "dark" />
         <Text style = {styles.title} >Just a Few More Things...</Text>
         <Person name = 'person' size = {90} style = {{marginVertical: 10,}} />
         

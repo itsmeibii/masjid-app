@@ -74,7 +74,7 @@ function RootNavigator() {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isAuthenticated) {
       navigation.navigate('nav');
     } else {
       navigation.navigate('signup');

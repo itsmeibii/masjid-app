@@ -1,4 +1,4 @@
-import { Image, View, Text, SafeAreaView, StyleSheet, Alert, Button, ActivityIndicator, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Pressable } from 'react-native';
+import { Image, View, Text, SafeAreaView, StyleSheet ,Alert, Button, ActivityIndicator, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
 import React, { useState, useEffect, useRef, createRef } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -10,26 +10,32 @@ import { useAuth } from '../context/AuthContext';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { UserInfoName } from './extrainfo1';
 import UserInfoAge from './extrainfo2';
+import UserInfoState from './extrainfo3'
+import { StatusBar } from 'expo-status-bar';
+
+
 
 
 SplashScreen.preventAutoHideAsync();
 
 export default SignUpNavigator = () => {
-  const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     
   })
   const {Navigator, Screen} = createNativeStackNavigator();
   return (
-    <Navigator initialRouteName = "signuporig">
+    <Navigator initialRouteName = "stateinfo" >
       <Screen name = "signuporig" component = {SignupScreen} options = {{headerShown : false}} />
       <Screen name = "nameinfo" component =  {UserInfoName} options = {{headerShown : false, presentation: 'card', gestureEnabled: true}} />
       <Screen name = 'ageinfo' component = {UserInfoAge} options = {{headerShown: false, presentation: 'card', gestureEnabled: true}} />
+      <Screen name = 'stateinfo' component = {UserInfoState} options = {{headerShown: false, presentation: 'card', gestureEnabled: true}} />
     </Navigator>
   )
 
 }
 
 function SignupScreen({navigation}) {
+    const [size, setSize] = useState(250);
     const {register} = useAuth
     
     const [loading, setLoading] = useState(false);
@@ -49,7 +55,7 @@ function SignupScreen({navigation}) {
         setInputs(newInputs);
     }
     
-
+    
     const handleSignup =  () => {
         for (let i = 0; i < 3; i++) {
             if (!inputs[i]){
@@ -129,17 +135,18 @@ function SignupScreen({navigation}) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar style = "dark" />
             <View style={styles.title}>
                 <Text style={{ fontSize: 50, paddingTop: 30,  fontWeight: 'bold' }}>Sign Up</Text>  
             </View>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <>
-            <Image source = {require('../assets/loginpv.png')} style = {{height: 250, width: 250, marginBottom:90,}} />
-                <View style={styles.login_input}>
+            <Image source = {require('../assets/loginpv.png')} style = {{height: size, width: size, marginBottom:90,}} />
+                <KeyboardAvoidingView style={styles.login_input} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                 
                     <UserInput ref = {inputRefs.current[0]} onChangeText = {(text) => onChangeInputs(text,0)} placeholder='Email'  icon = {(props) => {
-                    return <EmailIconImport name = 'email-multiple' {...props}/>
-                    }}  />
+                    return <EmailIconImport name = 'email-multiple' {...props}  />
+                    }} onPress = {() => setSize(80)} />
                     <UserInput ref = {inputRefs.current[1]} onChangeText = {(text) => onChangeInputs(text,1)} placeholder='Password'  show = {false} icon = {(props) => {
                         return <PassIconImport name = 'key' {...props} />
                     }}/>
@@ -166,7 +173,7 @@ function SignupScreen({navigation}) {
                         <Text style = {{fontWeight: 'bold', color: 'darkgreen', fontSize: 15,}}> Login! </Text>
                         </Pressable>
                     </View>
-                </View>
+                </KeyboardAvoidingView>
                 </>
 
             </TouchableWithoutFeedback>
