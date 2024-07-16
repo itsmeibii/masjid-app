@@ -22,6 +22,7 @@ import EmailIconImport from 'react-native-vector-icons/MaterialCommunityIcons';
 import PassIconImport from 'react-native-vector-icons/Foundation';
 
 
+
 SplashScreen.preventAutoHideAsync();
 
 export default function Loginscreen({ navigation }) {

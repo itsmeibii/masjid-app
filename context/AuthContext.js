@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { createContext, useState, useEffect, useContext } from 'react';
-import {onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
-import { auth } from '../backend/firebaseConfig';
+import {onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth';
+import { auth, db } from '../backend/firebaseConfig';
 import {doc,getDoc,setDoc} from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
 
@@ -38,7 +38,8 @@ export const AuthContextProvider = ({children}) => {
     }
     const logout = async () => {
       try {
-        
+         await signOut();
+
       } catch (error) {
         
       }

@@ -1,5 +1,5 @@
 import { Image, View, Text, SafeAreaView, StyleSheet, Alert, Button, ActivityIndicator, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Pressable } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, createRef } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import UserInput from '../components/input';
@@ -8,7 +8,8 @@ import PassIconImport from 'react-native-vector-icons/Foundation'
 import ConfPassIconImport from 'react-native-vector-icons/Feather'
 import { useAuth } from '../context/AuthContext';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { UserInfoName } from './signupextras';
+import { UserInfoName } from './extrainfo1';
+import UserInfoAge from './extrainfo2';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -19,9 +20,10 @@ export default SignUpNavigator = () => {
   })
   const {Navigator, Screen} = createNativeStackNavigator();
   return (
-    <Navigator initialRouteName = "signup">
-      <Screen name = "signup" component = {SignupScreen} options = {{headerShown : false}} />
+    <Navigator initialRouteName = "signuporig">
+      <Screen name = "signuporig" component = {SignupScreen} options = {{headerShown : false}} />
       <Screen name = "nameinfo" component =  {UserInfoName} options = {{headerShown : false, presentation: 'card', gestureEnabled: true}} />
+      <Screen name = 'ageinfo' component = {UserInfoAge} options = {{headerShown: false, presentation: 'card', gestureEnabled: true}} />
     </Navigator>
   )
 
@@ -29,14 +31,11 @@ export default SignUpNavigator = () => {
 
 function SignupScreen({navigation}) {
     const {register} = useAuth
-    const einputref = useRef();
-    const pinputref = useRef();
-    const cpinputref = useRef();
-    const emailRef = useRef("");
-    const cpasswordRef = useRef("");
-    const passwordRef = useRef("");
+    
     const [loading, setLoading] = useState(false);
     const [fontsLoaded, setFontsLoaded] = useState(false);
+    const [inputs, setInputs] = useState(Array(3).fill(""));
+    const inputRefs = useRef(inputs.map(() => createRef()));
 
     const getFonts = async () => {
         await Font.loadAsync({
@@ -44,14 +43,25 @@ function SignupScreen({navigation}) {
         });
         setFontsLoaded(true);
     };
+    const onChangeInputs = (text, index) => {
+        const newInputs = [...inputs];
+        newInputs[index] = text;
+        setInputs(newInputs);
+    }
+    
 
-    const handleSignup =  async () => {
-        if (!emailRef.current) {
-            einputref.current.focus();
-            Alert.alert('Please enter an email');
-        } else if (!passwordRef.current) {
-            pinputref.current.focus();
-            Alert.alert('Please enter a password')
+    const handleSignup =  () => {
+        for (let i = 0; i < 3; i++) {
+            if (!inputs[i]){
+                let field = i > 0 ? 'password' : 'email';
+                Alert.alert("Please fill in " + field + " field");
+                inputRefs.current[i].current.focus();
+                return;
+            }
+        }
+        if (inputs[1] !== inputs[2]) {
+            Alert.alert("Passwords must match");
+            return;
         }
         navigation.navigate('nameinfo')
     };
@@ -127,13 +137,13 @@ function SignupScreen({navigation}) {
             <Image source = {require('../assets/loginpv.png')} style = {{height: 250, width: 250, marginBottom:90,}} />
                 <View style={styles.login_input}>
                 
-                    <UserInput onChangeText = {(text) => emailRef.current = text} placeholder='Email' ref = {einputref} icon = {(props) => {
+                    <UserInput ref = {inputRefs.current[0]} onChangeText = {(text) => onChangeInputs(text,0)} placeholder='Email'  icon = {(props) => {
                     return <EmailIconImport name = 'email-multiple' {...props}/>
                     }}  />
-                    <UserInput   onChangeText = {(text) => passwordRef.current = text} placeholder='Password' ref = {pinputref} show = {false} icon = {(props) => {
+                    <UserInput ref = {inputRefs.current[1]} onChangeText = {(text) => onChangeInputs(text,1)} placeholder='Password'  show = {false} icon = {(props) => {
                         return <PassIconImport name = 'key' {...props} />
                     }}/>
-                    <UserInput   onChangeText = {(text) => cpasswordRef.current = text} placeholder='Confirm Password' ref = {cpinputref} show = {false} icon = {(props) => {
+                    <UserInput ref = {inputRefs.current[2]}  onChangeText = {(text) => onChangeInputs(text,2)} placeholder='Confirm Password'  show = {false} icon = {(props) => {
                         return <ConfPassIconImport name = 'lock' {...props} />
                     }}/>
                     
@@ -143,7 +153,7 @@ function SignupScreen({navigation}) {
                     ) : (
                         
 
-                        <TouchableOpacity style = {{width: '100%', justifyContent: 'center', alignItems: 'center', }} onPress = {() => navigation.navigate("nameinfo")} >
+                        <TouchableOpacity style = {{width: '100%', justifyContent: 'center', alignItems: 'center', }} onPress = {handleSignup} >
                             <View style = {styles.signup_button}>
                                  <Text style = {{fontSize: 30, color: 'white', fontWeight: 900,}}> Register </Text>
                             </View>

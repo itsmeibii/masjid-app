@@ -73,13 +73,13 @@ function RootNavigator() {
 
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     navigation.navigate('nav');
-  //   } else {
-  //     navigation.navigate('login');
-  //   }
-  // }, [isAuthenticated, navigation]);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigation.navigate('nav');
+    } else {
+      navigation.navigate('signup');
+    }
+  }, [isAuthenticated, navigation]);
 
 
   return (

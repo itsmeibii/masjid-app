@@ -34,6 +34,8 @@ const UserInput = forwardRef(({ fontSize = null, uinfo = false,show = true,icon:
       flexDirection: 'row',
       alignItems: 'center',
       marginVertical: 20,
+      borderColor: 'black',
+      borderWidth: 2,
     },
     input: {
       fontSize: fontSize || heightToFontSize(height),
@@ -60,7 +62,7 @@ const UserInput = forwardRef(({ fontSize = null, uinfo = false,show = true,icon:
   return (
     <View style={styles.container}>
       <IconComponent size={heightToSize(height)} style = {styles.icon} color = '#373737' />
-      <TextInput secureTextEntry = {!show ? hidden : !show}
+      <TextInput secureTextEntry = {!show ? hidden : !show} textContentType = 'none'
       autoCapitalize = {uinfo}
       autoCorrect = {uinfo}
         ref={ref} 
