@@ -62,6 +62,23 @@ const UserInfoState = () => {
           
           width: '90%',
           marginTop: 80,
+        },
+        inputIOS : {
+          fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 2,
+    borderColor: 'black',
+    borderRadius: '10%',
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+    textAlign: 'center', // center text for iOS
+    height: '100%'
+        },
+        placeholder: {
+          color: 'black',
+          fontSize: 20,
+          fontWeight: 'bold',
         }
 
 
@@ -79,19 +96,27 @@ const UserInfoState = () => {
         
         <Text style = {styles.title} >Last Bit...</Text>
         
-        <Image source = {require('../assets/cake.png')} style = {{height: 200, width: 200, marginVertical: 40,}} />
+        <Image source = {require('../assets/pin.png')} style = {{height: 200, width: 200, marginVertical: 40,}} />
         
         <View style = {styles.container}>
         
-        <Button title = "Set Birthday" />
+        <View style = {{width: "90%", backgroundColor: '#DFDFDF', flex: 0.2}}>
         <Picker
       onValueChange={(value) => console.log(value)}
+      disabled = {!true}
+      placeholder = {{label: 'Select a City', value: null}}
+      
       items={[
-        { label: 'Football', value: 'football' },
-        { label: 'Baseball', value: 'baseball' },
-        { label: 'Hockey', value: 'hockey' },
-      ]}
+        { label: 'Alpharetta', value: 'football' },
+        { label: 'Roswell', value: 'baseball' },
+        { label: 'Milton', value: 'hockey' },
+      ]} style={{
+        inputIOS: styles.inputIOS,
+        inputAndroid: styles.inputAndroid,
+        placeholder: styles.placeholder,
+      }}
     />
+    </View>
         
         <View style = {styles.submit}>
         <TouchableOpacity >
