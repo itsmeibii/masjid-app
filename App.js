@@ -102,10 +102,12 @@ function RootNavigator() {
 
 export default function App() {
   return (
+    <React.StrictMode>
     <AuthContextProvider>
       <NavigationContainer>
         <RootNavigator />
       </NavigationContainer>
     </AuthContextProvider>
+    </React.StrictMode>
   );
 }
