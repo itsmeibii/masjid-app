@@ -10,7 +10,7 @@ import { StatusBar } from 'expo-status-bar';
 
 SplashScreen.preventAutoHideAsync();
 
-export const UserInfoName = ({navigation}) => {
+export default UserInfoName = ({route,navigation}) => {
   const [fwidth, setFwidth] = useState(3);
   const [lwidth, setLwidth] = useState(3);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -32,11 +32,13 @@ export const UserInfoName = ({navigation}) => {
   }, []);
   const handleSubmit = () => {
     if (fname && lname) {
-      navigation.navigate("ageinfo")
+      navigation.navigate("ageinfo", {...route.params, fname, lname});
+      console.log(route.params);
     } else  {
       Alert.alert('please fill all fields');
       !fname ? fnameref.current.focus() : lnameref.current.focus();
     }
+    
   }
     const styles = StyleSheet.create({
         title: {

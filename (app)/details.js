@@ -1,7 +1,7 @@
 import React from 'react'
 import {View, Text, StyleSheet, SafeAreaView, Image} from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Uinfo from './uinfo';
+import Uinfo from '../components/uinfo';
 import SettingsButton from '../components/SettingsButton';
 
 function NDetails(props) {

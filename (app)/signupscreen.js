@@ -1,4 +1,4 @@
-import { Image, View, Text, SafeAreaView, StyleSheet ,Alert, Button, ActivityIndicator, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
+import {Image, View, Text, SafeAreaView, StyleSheet ,Alert, Button, ActivityIndicator, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
 import React, { useState, useEffect, useRef, createRef } from 'react';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
@@ -8,10 +8,11 @@ import PassIconImport from 'react-native-vector-icons/Foundation'
 import ConfPassIconImport from 'react-native-vector-icons/Feather'
 import { useAuth } from '../context/AuthContext';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { UserInfoName } from './extrainfo1';
+import  UserInfoName  from './extrainfo1';
 import UserInfoAge from './extrainfo2';
 import UserInfoState from './extrainfo3'
 import { StatusBar } from 'expo-status-bar';
+;
 
 
 
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
   })
   const {Navigator, Screen} = createNativeStackNavigator();
   return (
-    <Navigator initialRouteName = "stateinfo" >
+    <Navigator initialRouteName = "signuporig" >
       <Screen name = "signuporig" component = {SignupScreen} options = {{headerShown : false}} />
       <Screen name = "nameinfo" component =  {UserInfoName} options = {{headerShown : false, presentation: 'card', gestureEnabled: true}} />
       <Screen name = 'ageinfo' component = {UserInfoAge} options = {{headerShown: false, presentation: 'card', gestureEnabled: true}} />
@@ -35,8 +36,9 @@ const styles = StyleSheet.create({
 }
 
 function SignupScreen({navigation}) {
+   
     const [size, setSize] = useState(250);
-    const {register} = useAuth
+    const {register, user, login} = useAuth();
     
     const [loading, setLoading] = useState(false);
     const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -69,7 +71,8 @@ function SignupScreen({navigation}) {
             Alert.alert("Passwords must match");
             return;
         }
-        navigation.navigate('nameinfo')
+        navigation.navigate("nameinfo", {email: inputs[0], password: inputs[1]})
+        
     };
 
     useEffect(() => {
@@ -130,12 +133,16 @@ function SignupScreen({navigation}) {
         return null; // or a loading spinner component
     }
      
-        
+        const test = async() => { //email,password, firstName, lastName ,age,state , city, phoneNumber
+            const response = await login('diger27@gmail.com','password');
+            
+        }
     
 
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar style = "dark" />
+            <Button title = "press me" onPress = {async () => await test()} />
             <View style={styles.title}>
                 <Text style={{ fontSize: 50, paddingTop: 30,  fontWeight: 'bold' }}>Sign Up</Text>  
             </View>

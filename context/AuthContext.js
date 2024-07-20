@@ -4,23 +4,21 @@ import { createContext, useState, useEffect, useContext } from 'react';
 import {onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth';
 import { auth, db } from '../backend/firebaseConfig';
 import {doc,getDoc,setDoc} from 'firebase/firestore';
-import bcrypt from 'bcryptjs';
+
 
 export const AuthContext = createContext();
 export const AuthContextProvider = ({children}) => {
   const [user,setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(undefined);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading,setLoading] = useState(true);
-  const hashPassword = async (password) => {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return hashedPassword;
-  };
+  
     useEffect(() => {
-      const unsub = onAuthStateChanged(auth, (user) => {
+      const unsub = onAuthStateChanged(auth, async (user) => {
         if (user) {
           setIsAuthenticated(true);
           setUser(user);
+          
+          
         } else {
           setIsAuthenticated(false);
           setUser(null);
@@ -29,29 +27,41 @@ export const AuthContextProvider = ({children}) => {
       });
       
     },[])
+    
     const login = async (email,password) => {
       try {
-        
+        const response = await signInWithEmailAndPassword(auth,email,password);
+        return {success: true, user: response.user}
       } catch (error) {
-        
+        let msg;
+        if (error.code == 'auth/email-already-exists') {
+          msg = "Email already in use. Try loggin in";
+        } else if (error.code == "auth/internal-error") {
+          msg = "Internal Error"
+        } else if (error.code.includes("auth/invalid")) {
+          msg = "Invalid Credentials";
+        } else {
+          msg = "Error. Code: " + error.code;
+        }
+        return {success: false, data: null, error: error.code, msg};
       }
     }
     const logout = async () => {
       try {
-         await signOut();
+         await signOut(auth);
+         return {success: true}
 
       } catch (error) {
-        
+        return {success:false, error}
       }
     }
     const register = async (email,password, firstName, lastName ,age,state , city, phoneNumber ) => {
       try {
         const response = await createUserWithEmailAndPassword(auth, email, password);
         const user = response?.user;
-        const hashedp = await hashPassword(password);
+        
         await setDoc(doc(db,'users',user?.uid), {
           email: user.email,
-          password: hashedp,
           "first-name" : firstName,
           "last-name" : lastName,
           "phone-number": phoneNumber,
@@ -61,16 +71,17 @@ export const AuthContextProvider = ({children}) => {
         }) 
         return {success: true, data: user};
       } catch (error) {
+        let msg;
         if (error.code == 'auth/email-already-exists') {
-          Alert.alert("Email already in use. Try loggin in");
+          msg = "Email already in use. Try loggin in";
         } else if (error.code == "auth/internal-error") {
-          Alert.alert("Internal Error")
-        } else if (error.code.slice(0,12) == 'auth/invalid') {
-          Alert.alert("Invalid Credentials");
+          msg = "Internal Error"
+        } else if (error.code.includes("auth/invalid")) {
+          msg = "Invalid Credentials";
         } else {
-          Alert.alert("Error. Code: " + error.code);
+          msg = "Error. Code: " + error.code;
         }
-        return {success: false, data: null};
+        return {success: false, data: null, error: error.code, msg};
       }
     }
   return (
@@ -84,7 +95,7 @@ export const AuthContextProvider = ({children}) => {
 export const useAuth = () => {
   const value = useContext(AuthContext)
   if (!value) {
-    throw new Error('useAuth must be wrapped an AuthContext provider');
+    throw new Error('useAuth must be wrapped in an AuthContext provider');
   }
   return value;
 }

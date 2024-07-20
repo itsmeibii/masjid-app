@@ -1,14 +1,17 @@
 
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Button, Text, View, StyleSheet, SafeAreaView, Platform} from 'react-native'
+import { useAuth } from '../context/AuthContext';
 
 export default function Home(props) {
+    const {logout} = useAuth();
    const styles = StyleSheet.create({
     safe: {
         flex: 1,
         alignItems: 'center',
         
     },
+    
     container : {
         top: 20,
         flex: 0.4,
@@ -39,6 +42,7 @@ export default function Home(props) {
    return (
     <SafeAreaView style = {styles.safe}  >
         <View style = {styles.container} />
+        <Button title = "press me mofo" onPress = {async() => await logout()} />
 
         
     </SafeAreaView>

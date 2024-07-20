@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View , Image, Keyboard, Button, TouchableOpacity} from 'react-native';
+import { Alert, SafeAreaView, StyleSheet, Text, View , Image, Keyboard, Button, TouchableOpacity} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import UserInput from '../components/input';
 import * as Font from 'expo-font';
@@ -9,7 +9,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import { StatusBar } from 'expo-status-bar';
 
 
-const UserInfoAge = ({navigation}) => {
+const UserInfoAge = ({route, navigation}) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [datePickerVisible, setDatePickerVisible] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -104,10 +104,10 @@ const UserInfoAge = ({navigation}) => {
         onCancel={hideDatePicker}
         />
         <View style = {styles.submit}>
-        <TouchableOpacity onPress = {() => selectedDate ? navigation.navigate("nameinfo") : Alert.alert("Please enter a birthdate")}>
+        <TouchableOpacity onPress = {() =>  selectedDate ? navigation.navigate("nameinfo") : Alert.alert("Please enter a birthdate")}>
         <Back name = 'arrow-left-circle' size = {50} style = {{color: 'black', }} />
         </TouchableOpacity>
-        <TouchableOpacity onPress = {() => navigation.navigate("stateinfo")} >
+        <TouchableOpacity onPress = {() => navigation.navigate("stateinfo",  {...route.params, bday: selectedDate.toLocaleDateString()})} >
         <Check name = 'check-circle-fill' size = {110} style = {{color: '#2DE371', marginLeft: 50, marginRight: 90,}} />
         </TouchableOpacity>
         </View>

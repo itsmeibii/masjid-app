@@ -20,6 +20,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import UserInput from '../components/input';
 import EmailIconImport from 'react-native-vector-icons/MaterialCommunityIcons';
 import PassIconImport from 'react-native-vector-icons/Foundation';
+import { useAuth } from '../context/AuthContext';
 
 
 
@@ -32,6 +33,7 @@ export default function Loginscreen({ navigation }) {
   const passwordRef = useRef('');
   const [loading, setLoading] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const {login} = useAuth();
 
 
   
@@ -43,7 +45,7 @@ export default function Loginscreen({ navigation }) {
     setFontsLoaded(true);
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!emailRef.current) {
       einputref.current.focus();
       Alert.alert('Please enter an email');
@@ -58,10 +60,11 @@ export default function Loginscreen({ navigation }) {
       Alert.alert('Please enter a valid email address');
     }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-    // Handle login process
+    const response = await login(emailRef.current, passwordRef.current)
+    setLoading(false);
+    if (!response.success) {
+      Alert.alert("Sign in", response.msg);
+    }
   };
 
   useEffect(() => {

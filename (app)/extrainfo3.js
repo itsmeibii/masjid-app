@@ -1,4 +1,4 @@
-import {    TouchableOpacity, SafeAreaView,StyleSheet, Text, View, Image, Button, ActivityIndicator } from 'react-native'
+import {    TouchableOpacity, SafeAreaView,StyleSheet, Text, View, Image, Button, ActivityIndicator, TextInput, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import * as Font from 'expo-font'
@@ -7,13 +7,39 @@ import Back from 'react-native-vector-icons/Feather'
 import * as SplashScreen from 'expo-splash-screen'
 import  Picker  from 'react-native-picker-select'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import UserInput from '../components/input'
+import { useAuth } from '../context/AuthContext'
 
-const UserInfoState = () => {
+const UserInfoState = ({route, navigation}) => {
+  const state = 'GA';
+
   const [selectedLanguage, setSelectedLanguage] = useState();
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [citiesLoaded, setCitiesLoaded] = useState(null);
-  
-  let listofcities = ['hello'];
+  const [citiesLoaded, setCitiesLoaded] = useState(false);
+  const [listofcities, setListofcities] = useState([]);
+  const [city, setCity] = useState(null);
+  const [number, setNumber] = useState(null);
+  const {register} = useAuth();
+  function phoneFormat(input){
+    // Strip all characters from the input except digits
+    input = input.replace(/\D/g,'');
+    
+    // Trim the remaining input to ten characters, to preserve phone number format
+    input = input.substring(0,10);
+
+    // Based upon the length of the string, we add formatting as necessary
+    var size = input.length;
+    if(size == 0){
+            input = input;
+    }else if(size < 4){
+            input = '('+input;
+    }else if(size < 7){
+            input = '('+input.substring(0,3)+') '+input.substring(3,6);
+    }else{
+            input = '('+input.substring(0,3)+') '+input.substring(3,6)+' - '+input.substring(6,10);
+    }
+    return input; 
+}
   
   
 
@@ -24,8 +50,20 @@ const UserInfoState = () => {
     });
     setFontsLoaded(true);
   };
+  //email,password, firstName, lastName ,age,state , city, phoneNumber
+  const handleRegister = async (email,password, firstName, lastName ,age,state , city, phoneNumber) => {
+    
+      const response = await register(email,password, firstName, lastName ,age,state , city, phoneNumber);
+      if (!response.success) {
+        Alert.alert(response.msg);
+      } else {
+        console.log("success!")
+      }
+    
+  }
+
   const fetchCities = async () => {
-    setTimeout(async () => {
+    
       try {
         const response = await fetch('https://parseapi.back4app.com/classes/Usabystate_GA?limit=387&keys=name',
           {
@@ -46,11 +84,13 @@ const UserInfoState = () => {
       }
     });
     console.log(formatted.slice(0,3))
-    listofcities = formatted;
+    setListofcities(formatted)
+    setCitiesLoaded(true);
       } catch (e) {
         console.error(e);
+        setCitiesLoaded(false);
       }
-    }, 5000)
+    
     
     
   }
@@ -60,18 +100,18 @@ const UserInfoState = () => {
     });
 
     //logic for cities loading
-    setCitiesLoaded(false);
+    
     
     fetchCities()
     
-    setCitiesLoaded(true);
+    
 
     
   }, []);
     const styles = StyleSheet.create({
         title: {
             marginTop: 30,
-            fontSize: 35,
+            fontSize: '35vw',
             textAlign: 'left',
             
             fontWeight: 'bold',
@@ -107,7 +147,6 @@ const UserInfoState = () => {
         },
         inputIOS : {
           backgroundColor: '#DFDFDF',
-          fontSize: 16,
           
           borderWidth: 2,
           borderColor: 'black',
@@ -116,7 +155,8 @@ const UserInfoState = () => {
           
           textAlign: 'center', // center text for iOS
           height: '100%',
-        
+          fontSize: 20,
+          fontWeight: 'bold',
           
           
         },
@@ -139,7 +179,7 @@ const UserInfoState = () => {
           },
           locinput: {
             width: '90%', 
-            flex: 0.25,
+            flex: 0.2,
             borderRadius: '10%',
             flexDirection: 'row',
             justifyContent: 'space-between'
@@ -158,10 +198,10 @@ const UserInfoState = () => {
     
     <SafeAreaView style = {{alignItems: 'center', flex: 1, width: '100%'}} >
       <StatusBar style = "dark" />
-        <Button title = "press me mofo" onPress = {() => fetchCities()} />
+        
         <Text style = {styles.title} >Last Bit...</Text>
         
-        <Image source = {require('../assets/pin.png')} style = {{height: 200, width: 200, marginVertical: 40,}} />
+        <Image source = {require('../assets/pin.png')} style = {{height: 100, width: 100, marginVertical: 10,}} />
         
         <View style = {styles.container}>
 
@@ -170,19 +210,18 @@ const UserInfoState = () => {
         <View style = {{width:'65%'}}>
         {citiesLoaded? ( 
           <Picker
-      onValueChange={(value) => console.log(value)}
-      disabled = {!true}
+      onValueChange={(value) => setCity(value)}
       placeholder = {{label: 'Select a City', value: null}}
       Icon = {() => {
         return <Icon name = "arrow-down-drop-circle" size = {30} color = "black" />
       }}
       
-      items={[]} style={{
+      items={listofcities} style={{
         inputIOS: styles.inputIOS,
         inputAndroid: styles.inputAndroid,
         placeholder: styles.placeholder,
         iconContainer: {
-          top: 25,
+          top: 20,
           right: 12,
         }
       }}
@@ -194,8 +233,10 @@ const UserInfoState = () => {
     </View>
     <View style = {{width: '25%',}}>
         <Picker
-      onValueChange={(value) => console.log(value)}
-      disabled = {true}
+      onValueChange={(value) => 
+        null
+      }
+      disabled
       placeholder = {{label: 'GA', value: "GA"}}
       Icon = {() => {
         return <Icon name = "arrow-down-drop-circle" size = {30} color = "rgba(0,0,0,0.5)" />
@@ -208,25 +249,34 @@ const UserInfoState = () => {
         inputAndroid: styles.inputAndroid,
         placeholder: styles.stateplaceholder,
         iconContainer: {
-          top: 23,
+          top: 20,
           right: 12,
         }
       }}
     />
     </View>
     </View>
+    <Image source = {require('../assets/phone.png')} style = {{height: 100, width: 100, marginVertical: 40,}} />
+    <KeyboardAvoidingView behavior= {Platform.OS == 'ios' ? 'padding' : 'height' }>
+    <UserInput  returnKeyType='done' keyboardType = 'numeric' onChangeText = {(num) =>  setNumber(num)} value = {phoneFormat(number || "")} style = {{marginBottom: 5}} />
+    <Text style = {{textAlign: "right", fontSize: 10, color: 'gray'}}>Valid US Phone Numbers Only</Text>
+    </KeyboardAvoidingView>
     
     
 
 
 
     
-        
+
         <View style = {styles.submit}>
-        <TouchableOpacity >
+        <TouchableOpacity onPress = {() => navigation.navigate("ageinfo") } >
         <Back name = 'arrow-left-circle' size = {50} style = {{color: 'black', }} />
         </TouchableOpacity>
-        <TouchableOpacity onPress = {() => navigation.navigate("stateinfo")} >
+        <TouchableOpacity onPress = {async () =>{
+          const {email,password, fname, lname ,bday} = route.params;
+           await handleRegister(email,password,fname,lname,bday,state,city,number);
+          }
+          }  >
         <Check name = 'check-circle-fill' size = {110} style = {{color: '#2DE371', marginLeft: 50, marginRight: 90,}} />
         </TouchableOpacity>
         </View>

@@ -20,7 +20,7 @@ const DefaultIcon = (props) => (
   //x is height
  
   
-const UserInput = forwardRef(({ fontSize = null, uinfo = false,show = true,icon: IconComponent = DefaultIcon, height = 70, width = '90%', ...props }, ref) => {
+const UserInput = forwardRef(({ style = null,fontSize = null, uinfo = false,show = true,icon: IconComponent = DefaultIcon, height = 70, width = '90%', ...props }, ref) => {
   const heightToSize = height => 0.35 * height + 5.5;
   const heightToFontSize = height => (height+10)/4;
  
@@ -60,7 +60,7 @@ const UserInput = forwardRef(({ fontSize = null, uinfo = false,show = true,icon:
   });
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,style]}>
       <IconComponent size={heightToSize(height)} style = {styles.icon} color = '#373737' />
       <TextInput secureTextEntry = {!show ? hidden : !show} textContentType = 'none'
       autoCapitalize = {uinfo}
