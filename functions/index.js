@@ -13,8 +13,9 @@ const {getFirestore} = require("firebase-admin/firestore")
 const app = express();
 const fb = initializeApp({
     credential: applicationDefault(),
-     databaseURL: 'https://masjid-app-b68d9.firebaseio.com'
+    //  databaseURL: 'https://masjid-app-b68d9.firebaseio.com'
 })
+const db = getFirestore();
 app.listen("3000", () => console.log("app running"))
 app.get('/', (req,res) => {
     res.send("hello world");
@@ -25,7 +26,7 @@ app.get('/users/:uid', async (req,res) => {
     
     try {
         
-        const db = getFirestore();
+        
     
         // Example: Get a specific document from 'users' collection
         const userDoc = await db.collection('users').doc(id).get();
@@ -42,6 +43,7 @@ app.get('/users/:uid', async (req,res) => {
         console.error('Error fetching user:', error);
         res.status(500).json({ error: 'Internal server error' });
       }
+      console.log("returned data for user: " + id)
 
     
 })
