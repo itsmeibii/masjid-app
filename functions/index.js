@@ -28,7 +28,7 @@ app.get('/users/:uid', async (req,res) => {
         
         
     
-        // Example: Get a specific document from 'users' collection
+        
         const userDoc = await db.collection('users').doc(id).get();
     
         if (!userDoc.exists) {
@@ -46,4 +46,31 @@ app.get('/users/:uid', async (req,res) => {
       console.log("returned data for user: " + id)
 
     
+})
+
+app.get('/maps/nearby', async (req,res) => {
+    // const lat = 34.075;
+    // const lng = -84.35;
+    const {lat,lng} = req.query;
+    const radius = 10000;
+    const params = new URLSearchParams({
+        location: `${lat},${lng}`,
+        radius,
+        type: 'mosque',
+        key: "AIzaSyA76LUqRhe8V8nlAfTvPqZBq6x9iaKBYXw",
+    });
+
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?${params.toString()}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        let masjids = data.results.map((result) => {
+            return result.name;
+        })
+        res.json(masjids);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+    console.log("returned data for nearby masjids")
 })
