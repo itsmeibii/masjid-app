@@ -35,6 +35,7 @@
     "firebase": "^10.12.3",
     "firebase-admin": "^12.2.0",
     "firebase-tools": "^13.13.2",
+    "puppeteer-core": "^22.14.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.2",

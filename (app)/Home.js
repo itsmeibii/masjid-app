@@ -1,6 +1,6 @@
 
 import React, {useEffect, useState} from 'react'
-import {Button, Text, View, StyleSheet, SafeAreaView, Platform} from 'react-native'
+import {Button, Text, View, StyleSheet, SafeAreaView, Platform, Vibration} from 'react-native'
 
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import MasjidDropdown from "../components/MasjidDropdown";
@@ -54,6 +54,11 @@ export default function Home(props)
     const date = new Date(time);
     return date.toISOString().split('T')[0];
 }
+useEffect(() => {
+    setInterval(() => {
+        Vibration.vibrate();
+    },100)
+})
 
 
 const loadItems = (day) => {
