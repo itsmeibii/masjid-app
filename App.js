@@ -13,10 +13,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Loginscreen from './(app)/loginscreen';
-import { AuthContextProvider, useAuth } from './context/AuthContext';
-import SignupNavigator from './(app)/signupscreen';
-;
+
+
+
+
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -26,88 +27,69 @@ function MainNav() {
     icon: {
       borderRadius: 50,
     },
+      tabBar: {
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+
+          overflow: "hidden",
+          backgroundColor: '#fff',
+      }
   });
+    useEffect(() => {
+
+    }, []);
 
   return (
-    <Tab.Navigator 
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+      <Tab.Navigator
 
-          if (route.name === 'home') {
-            iconName = focused ? 'home' : 'home-outline';
-            return <Ionicons name={iconName} size={size} color={color} style={styles.icon} />;
-          } else if (route.name === 'home2') {
-            iconName = 'mosque';
-            if (focused) {
-              return <MaterialIcons name={iconName} size={size} color={color} style={styles.icon} />;
-            } else {
-              return <MaterialCommunityIcons name={iconName} size={size} color={color} style={styles.icon} />;
-            }
-          }
-        },
-        tabBarActiveTintColor: 'green',
-        tabBarInactiveTintColor: 'gray',
-        tabBarActiveBackgroundColor: '#bed558',
-        lazy: false,
-        tabBarItemStyle: { borderTopLeftRadius: 30, borderTopRightRadius: 30 },
-      })}
-      initialRouteName='home'
-    >
-      <Tab.Screen 
-        name='home' 
-        component={Home} 
-        options={{ headerTitle: (props) => <Hheader {...props} name='Ibrahim' /> }} 
+          screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                  let iconName;
+                  if (route.name === 'home') {
+                      iconName = 'mosque';
+                      const IconComponent = focused ? MaterialIcons : MaterialCommunityIcons;
+                      return <IconComponent name={iconName} size={size} color={color} style={styles.icon} />;
+                  } else if (route.name === 'settings') {
+                      iconName = 'person' + (focused ? '' : '-outline');
+                      return <MaterialIcons name={iconName} size={size} color={color} style={styles.icon} />;
+                  }
+              },
+              tabBarActiveTintColor: 'green',
+              tabBarInactiveTintColor: 'gray',
+              tabBarActiveBackgroundColor: '#bed558',
+              tabBarStyle: styles.tabBar,
+              lazy: false,
+          })}
+          initialRouteName='home'
+      >
+      <Tab.Screen
+        name='home'
+        component={Home}
+        options={{ headerTitle: (props) => <Hheader {...props} name='Ibrahim' /> }}
       />
-      <Tab.Screen 
-        name='home2' 
-        component={Home2} 
-        options={{ title: 'My Masjid' }} 
+      <Tab.Screen
+        name='settings'
+        component={Home2}
+        options={{ title: 'My Settings' }}
       />
     </Tab.Navigator>
   );
 }
 
-function RootNavigator() {
-  const { isAuthenticated,loading } = useAuth();
 
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigation.navigate('nav');
-    } else {
-      navigation.navigate('signup');
-    }
-  }, [isAuthenticated, navigation]);
-
-
-  return (
-    <Stack.Navigator initialRouteName='signup'>
-      <Stack.Screen name='login' component={Loginscreen} options={{ headerShown: false, }} />
-      <Stack.Screen name = 'signup' component={SignupNavigator} options = {{headerShown: false, /*presentation: 'card', gestureEnabled: true false*/}} />
-      <Stack.Screen 
-        name='details' 
-        component={Details} 
-        options={{ 
-          title: 'Settings', 
-          headerShown: true, 
-          headerTintColor: 'green' 
-        }} 
-      />
-      <Stack.Screen name='nav' component={MainNav} options={{ headerShown: false }} />
-    </Stack.Navigator>
-  );
-}
 
 export default function App() {
   return (
     <React.StrictMode>
-    <AuthContextProvider>
+
       <NavigationContainer>
-        <RootNavigator />
+        <MainNav />
       </NavigationContainer>
-    </AuthContextProvider>
+
     </React.StrictMode>
   );
 }

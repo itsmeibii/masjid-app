@@ -92,13 +92,7 @@ export const AuthContextProvider = ({children}) => {
   
 }
 
-export const useAuth = () => {
-  const value = useContext(AuthContext)
-  if (!value) {
-    throw new Error('useAuth must be wrapped in an AuthContext provider');
-  }
-  return value;
-}
+
 
 
 

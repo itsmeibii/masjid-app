@@ -1,10 +1,21 @@
 
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Button, Text, View, StyleSheet, SafeAreaView, Platform} from 'react-native'
-import { useAuth } from '../context/AuthContext';
 
-export default function Home(props) {
-    const {logout} = useAuth();
+import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import MasjidDropdown from "../components/MasjidDropdown";
+import ScreenWrapper from "../components/ScreenWrapper";
+
+
+
+
+
+export default function Home(props)
+{
+    const [date, setDate] = useState(new Date());
+    const [selected,setSelected] = useState(false)
+
+    const [items, setItems] = useState({});
    const styles = StyleSheet.create({
     safe: {
         flex: 1,
@@ -38,13 +49,59 @@ export default function Home(props) {
         fontSize: 24,
         color: 'black',
     }
-   }) 
-   return (
-    <SafeAreaView style = {styles.safe}  >
-        <View style = {styles.container} />
-        <Button title = "press me mofo" onPress = {async() => await logout()} />
+   })
+    function timeToString(time) {
+    const date = new Date(time);
+    return date.toISOString().split('T')[0];
+}
 
-        
+
+const loadItems = (day) => {
+
+
+        setTimeout(() => {
+            for (let i = -15; i < 85; i++) {
+                const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+                const strTime = timeToString(time);
+
+                if (!items[strTime]) {
+                    items[strTime] = [];
+
+                    const numItems = Math.floor(Math.random() * 3 + 1);
+                    for (let j = 0; j < numItems; j++) {
+                        items[strTime].push({
+                            name: 'Item for ' + strTime + ' #' + j,
+                            height: Math.max(50, Math.floor(Math.random() * 150)),
+                            day: strTime
+                        });
+                    }
+                }
+            }
+            const newItems = {};
+            Object.keys(items).forEach(key => {
+                newItems[key] = items[key];
+            });
+            setItems(newItems)
+        }, 1000);
+};
+   return (
+
+    <SafeAreaView style = {[styles.safe, {marginVertical: 20,}]} >
+        <View style = {{width: '100%', flex: 0.2}} >
+        <MasjidDropdown  />
+        </View>
+        <View style = {styles.container} />
+        <View style = {{flex:1, width: '90%', marginTop: 50,marginBottom: 30, borderRadius: 50, backgroundColor: 'yellow'}}>
+        <Agenda
+            items={items}
+            loadItemsForMonth={loadItems}
+            selected={'2017-05-16'}
+
+            />
+        </View>
+
+
     </SafeAreaView>
+
    );
 }
