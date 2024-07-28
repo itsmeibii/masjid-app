@@ -2,20 +2,54 @@ import React, {useEffect, useState} from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
+import sorter from "./sorter";
 const data = [
-    { label: 'Item 1', value: '1' },
-    { label: 'Item 2', value: '2' },
-    { label: 'Item 3', value: '3' },
-    { label: 'Item 4', value: '4' },
-    { label: 'Item 5', value: '5' },
-    { label: 'Item 6', value: '6' },
-    { label: 'Item 7', value: '7' },
-    { label: 'Item 8', value: '8' },
+
 ];
 
-const MasjidDropdown = () => {
+let listofmosques = [
+    {
+        name: 'Gwinnett Islamic Circle',
+        lat: 34.02732,
+        lng:-84.04733
+    },
+    {
+        name: 'Hamzah Islamic Center',
+        lat: 34.11766,
+        lng:-84.24867,
+    },
+    {
+        name: 'Islamic Center of North Fulton',
+        lat: 34.07376,
+        lng:-84.32345,
+    },
+    {
+        name: 'Roswell Community Masjid',
+        lat: 34.03071,
+        lng:-84.34033,
+    },
+
+
+
+]
+const MasjidDropdown = ({loc}) => {
+    const [sortedMosques, setSortedMosques] = useState(listofmosques);
     const [selected, setSelected] = useState([]);
+    useEffect(() => {
+        if (loc) {
+            const { latitude, longitude } = loc;
+            if (latitude && longitude) {
+                const sorted = sorter(listofmosques, latitude, longitude);
+                setSortedMosques(sorted);
+            }
+        }
+    }, [loc]);
+
+    const mosqueData = sortedMosques.map(mosque => ({
+        label: mosque.name,
+        value: mosque.name,
+    }));
+
 
 
     return (
@@ -27,7 +61,7 @@ const MasjidDropdown = () => {
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 search
-                data={data}
+                data={mosqueData}
                 labelField="label"
                 valueField="value"
                 placeholder="Select item"

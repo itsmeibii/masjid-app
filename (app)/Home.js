@@ -5,6 +5,9 @@ import {Button, Text, View, StyleSheet, SafeAreaView, Platform, Vibration} from 
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import MasjidDropdown from "../components/MasjidDropdown";
 import ScreenWrapper from "../components/ScreenWrapper";
+import * as Location from 'expo-location';
+
+
 
 
 
@@ -12,6 +15,7 @@ import ScreenWrapper from "../components/ScreenWrapper";
 
 export default function Home(props)
 {
+    const [location, setLocation] = useState(null);
     const [date, setDate] = useState(new Date());
     const [selected,setSelected] = useState(false)
 
@@ -55,10 +59,28 @@ export default function Home(props)
     return date.toISOString().split('T')[0];
 }
 useEffect(() => {
-    setInterval(() => {
-        Vibration.vibrate();
-    },100)
-})
+    const checkPermissions = async () => {
+        const { status } = await Location.getForegroundPermissionsAsync();
+        if (status === 'granted') {
+
+            // Fetch location if permission is granted
+            const { coords } = await Location.getCurrentPositionAsync({});
+            setLocation(coords);
+            console.log(coords);
+        } else {
+            // Request permission if not granted
+            const { status: newStatus } = await Location.requestForegroundPermissionsAsync();
+
+            if (newStatus === 'granted') {
+                const { coords } = await Location.getCurrentPositionAsync({});
+                setLocation(coords);
+                console.log(coords);
+            }
+        }
+    };
+    checkPermissions();
+
+},[])
 
 
 const loadItems = (day) => {
@@ -93,7 +115,7 @@ const loadItems = (day) => {
 
     <SafeAreaView style = {[styles.safe, {marginVertical: 20,}]} >
         <View style = {{width: '100%', flex: 0.2}} >
-        <MasjidDropdown  />
+        <MasjidDropdown  loc ={location ?? 'yeah'}/>
         </View>
         <View style = {styles.container} />
         <View style = {{flex:1, width: '90%', marginTop: 50,marginBottom: 30, borderRadius: 50, backgroundColor: 'yellow'}}>
