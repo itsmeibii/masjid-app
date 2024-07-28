@@ -1,19 +1,16 @@
-const functions = require('firebase-functions');
-const express = require('express');
 
-const {initializeApp, applicationDefault} = require("firebase-admin/app")
-const {getFirestore} = require("firebase-admin/firestore")
-const prayerRouter = require('./routes/prayertimes');
+const express = require('express');
+const {scrapeandstore,db} = require('./prayertimes');
+const {onSchedule} = require("firebase-functions/v2/scheduler");
+const {onRequest} = require("firebase-functions/v2/https");
+
+
 
 
 const app = express();
-// const fb = initializeApp({
-//     credential: applicationDefault(),
-//     //  databaseURL: 'https://masjid-app-b68d9.firebaseio.com'
-// })
-// const db = getFirestore();
+
 app.use(express.json());
-app.use('/prayer', prayerRouter);
+
 app.listen("3000", () => console.log("app running"))
 app.get('/', (req,res) => {
     res.send("hello world");
@@ -47,4 +44,29 @@ app.get('/maps/nearby', async (req,res) => {
     }
     console.log("returned data for nearby masjids")
 })
+
+exports.scheduledScrapePrayerTimesRCM = onSchedule('15 0 * * *', async (event) => {
+    await scrapeandstore('RCM');
+});
+
+exports.scheduledScrapePrayerTimesICNF = onSchedule('15 0 * * *', async (event) => {
+    await scrapeandstore('ICNF');
+});
+
+app.get('/prayertimes/:mosque', async (req, res) => {
+    const mosqueKey = req.params.mosque;
+    try {
+        const doc = await db.collection('prayerTimes').doc(mosqueKey).get();
+        if (!doc.exists) {
+            return res.status(404).send(`No prayer times found for ${mosqueKey}`);
+        }
+        const prayerTimes = doc.data();
+        res.status(200).json(prayerTimes);
+    } catch (e) {
+        console.error(`Error fetching prayer times for ${mosqueKey}:`, e);
+        res.sendStatus(500);
+    }
+});
+
+exports.api = onRequest(app)
 

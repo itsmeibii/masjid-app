@@ -27,6 +27,12 @@ export const auth = initializeAuth(app, {
 
 })
 export const db = getFirestore(app);
+console.log(auth.currentUser.getIdToken(true).then(function(idToken) {
+  console.log(idToken);
+  // Send this token with your request
+}).catch(function(error) {
+  // Handle error
+}));
 
 export const usersRef = collection(db,'users')
 
