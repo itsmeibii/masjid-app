@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import sorter from "./sorter";
+import {sorter, getDistanceFromLatLonInMi} from "./sorter";
 const data = [
 
 ];
@@ -46,7 +46,7 @@ const MasjidDropdown = ({loc}) => {
     }, [loc]);
 
     const mosqueData = sortedMosques.map(mosque => ({
-        label: mosque.name,
+        label: `${mosque.name} (${getDistanceFromLatLonInMi(loc.latitude, loc.longitude, mosque.lat, mosque.lng).toFixed(1)} mi)`,
         value: mosque.name,
     }));
 
