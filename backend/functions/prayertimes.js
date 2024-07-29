@@ -38,6 +38,8 @@ const mosques = {
                     // If the row contains the prayer name and time
                     if (columns.length >= 2 && columns[0] && columns[1]) {
                         const prayerName = columns[0].innerText.trim();
+                        //const iqamaTime = columns[2] ? columns[2].innerText.trim() : null;
+                        //below is azan time
                         prayerTimes[prayerName] = columns[1].innerText.trim();
                     }
                 }
@@ -49,7 +51,7 @@ const mosques = {
     ICNF: {
         url: 'https://icnf.org/',
         scraper: async (page) => {
-            await page.waitForSelector('#prayerTimeApp > div > div.ptTableContainer > table');
+            //don't need to wait for selector
 
             return await page.evaluate(() => {
                 // Find the table
@@ -76,6 +78,84 @@ const mosques = {
                 return prayerTimes;
             });
         }
+    },
+    HIC: {
+        url: 'https://masjidhamzah.com',
+        scraper: async (page) => {
+            return await page.evaluate(() => {
+                // Find the table
+                const table = document.querySelector('#prayerTimeApp > div > div.ptTableContainer > table');
+
+                if (!table) return null;
+
+                const prayerTimes = {Masjid: 'Hamzah Islamic Center'};
+
+                // Find all rows in the table
+                const rows = table.querySelectorAll('tbody tr');
+
+                // Iterate over each row to get prayer times, skipping the header
+                rows.forEach(row => {
+                    const columns = row.querySelectorAll('th, td');
+
+                    // If the row contains the prayer name and times
+                    if (columns.length >= 2) {
+                        const prayerName = columns[0].innerText.trim();
+                        // Adjust extraction logic based on the available columns
+                        const azanTime = columns[1].innerText.trim();
+                        //const iqamaTime = columns[2] ? columns[2].innerText.trim() : null;
+
+                        // Only add prayer names and times if they are not "Shurooq" (optional)
+                        if (prayerName !== 'Shurooq') {
+                            prayerTimes[prayerName] = azanTime;
+                        }
+                    }
+                });
+
+                return prayerTimes;
+            });
+        }
+
+    },
+    GIC: {
+        url:"'https://masjidal.com/widget/simple/?masjid_id=pQKMMBKB&monthly=v3'",
+        scraper: async (page) => {
+            await new Promise(resolve => setTimeout(resolve, 500)); //delay by 500
+            return await page.evaluate(() => {
+                // Find the table
+                const table = document.querySelector('#time-table');
+
+                if (!table) return null;
+
+                const prayerTimes = { Masjid: 'Gwinnett Islamic Circle' };
+
+                // Find all rows in the table
+                const rows = table.querySelectorAll('tbody tr');
+
+                // Iterate over each row to get prayer times, skipping the header
+                rows.forEach((row, index) => {
+                    if (index > 5 && index < 13) {
+                        const columns = row.querySelectorAll('td');
+                        columns.forEach((column, colIndex) => {
+                            console.log(`Row ${index} Column ${colIndex}: ${column.innerText}`);
+                        });
+                        // If the row contains the prayer name and times
+                        if (columns.length >= 2) {
+                            const prayerName = columns[0].innerText.trim();
+                            // Adjust extraction logic based on the available columns
+                            const azanTime = columns[1].innerText.trim();
+                            // const iqamaTime = columns[2] ? columns[2].innerText.trim() : null;
+
+                            // Only add prayer names and times if they are not "Shurooq" (optional)
+                            if (prayerName !== 'Shurooq') {
+                                prayerTimes[prayerName] = azanTime;
+                            }
+                        }
+                    }
+                });
+
+                return prayerTimes;
+            });
+        }
     }
 }
 
@@ -88,9 +168,7 @@ const mosques = {
 
     let browser;
     try {
-        browser = await puppeteer.connect({
-            browserWSEndpoint: `wss://${auth}@brd.superproxy.io:9222`
-        });
+        browser = puppeteer.launch();
         const page = await browser.newPage();
         page.setDefaultNavigationTimeout(2 * 60 * 1000);
 

@@ -1,16 +1,11 @@
-
 import React, {useEffect, useState} from 'react'
-import {Button, Text, View, StyleSheet, SafeAreaView, Platform, Vibration} from 'react-native'
+import {Platform, SafeAreaView, StyleSheet, View} from 'react-native'
 
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {Agenda} from 'react-native-calendars';
 import MasjidDropdown from "../components/MasjidDropdown";
-import ScreenWrapper from "../components/ScreenWrapper";
 import * as Location from 'expo-location';
-
-
-
-
-
+import {auth} from '../backend/functions/firebaseConfig'
+import {signInAnonymously, getIdToken} from 'firebase/auth';
 
 
 export default function Home(props)
@@ -59,6 +54,14 @@ export default function Home(props)
     return date.toISOString().split('T')[0];
 }
 useEffect(() => {
+    if (!auth.currentUser) {
+        signInAnonymously(auth).then(() => {
+            console.log('signed in anonymously');
+        }).catch((e) => {
+            console.log(`ERROR ${e}`);
+        });
+    }
+
     const checkPermissions = async () => {
         const { status } = await Location.getForegroundPermissionsAsync();
         if (status === 'granted') {
@@ -79,6 +82,31 @@ useEffect(() => {
         }
     };
     checkPermissions();
+
+    return auth.onAuthStateChanged(async (user) => {
+        try {
+            if (user) {
+                console.log('fetching....')
+                const token = await getIdToken(user);
+                //const response = await fetch('https://api-bkrf4j3bwa-uc.a.run.app/maps/nearby?lat=34.075956&lng=-84.352815');
+                const response = await fetch ("https://api-bkrf4j3bwa-uc.a.run.app", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                if (response.ok) {
+                    //const data = await response.json();
+                    console.log(response);
+                } else {
+                    console.log(`error fetching data ${response.status}`);
+                }
+            }
+        } catch (e) {
+            console.log(e);
+        }
+
+    });
 
 },[])
 

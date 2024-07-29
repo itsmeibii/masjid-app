@@ -52,6 +52,12 @@ exports.scheduledScrapePrayerTimesRCM = onSchedule('15 0 * * *', async (event) =
 exports.scheduledScrapePrayerTimesICNF = onSchedule('15 0 * * *', async (event) => {
     await scrapeandstore('ICNF');
 });
+exports.scheduledScrapePrayerTimesHIC = onSchedule('15 0 * * *', async (event) => {
+    await scrapeandstore('HIC');
+});
+exports.scheduledScrapePrayerTimesGIC = onSchedule('15 0 * * *', async (event) => {
+    await scrapeandstore('GIC');
+});
 
 app.get('/prayertimes/:mosque', async (req, res) => {
     const mosqueKey = req.params.mosque;

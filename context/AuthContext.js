@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { createContext, useState, useEffect, useContext } from 'react';
 import {onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth';
-import { auth, db } from '../backend/firebaseConfig';
+import { auth, db } from '../backend/functions/firebaseConfig';
 import {doc,getDoc,setDoc} from 'firebase/firestore';
 
 
