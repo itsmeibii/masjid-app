@@ -11,7 +11,7 @@ const app = express();
 
 app.use(express.json());
 
-app.listen("3000", () => console.log("app running"))
+app.listen("8080", () => console.log("app running"))
 app.get('/', (req,res) => {
     res.send("hello world");
 })
