@@ -35,3 +35,5 @@ fs.createReadStream(zipFilePath)
 //     .on('error', (err) => {
 //         console.error('An error occurred:', err);
 //     });
+
+module.exports.whatsappnames = whatsappnames;

@@ -1,18 +1,29 @@
 import React, {useEffect, useState} from 'react'
-import {Platform, SafeAreaView, StyleSheet, View} from 'react-native'
+import {ActivityIndicator, Button, Platform, SafeAreaView, StyleSheet, View} from 'react-native'
 
 import {Agenda} from 'react-native-calendars';
 import MasjidDropdown from "../components/MasjidDropdown";
 import * as Location from 'expo-location';
-import {auth} from '../backend/functions/firebaseConfig'
-import {signInAnonymously, getIdToken} from 'firebase/auth';
+
+import { Modal } from 'react-native';
+import Intro from './intro';
+import Hheader from '../components/hheader';
+import * as SplashScreen from 'expo-splash-screen'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export default function Home(props)
+import { useModal } from '../context/AuthContext';
+
+
+
+SplashScreen.preventAutoHideAsync();
+export default function Home({navigation})
 {
-    const [location, setLocation] = useState(null);
+    const {name, setName} = useModal()
+    const [location, setLocation] = useState(undefined);
     const [date, setDate] = useState(new Date());
     const [selected,setSelected] = useState(false)
+    
 
     const [items, setItems] = useState({});
    const styles = StyleSheet.create({
@@ -53,14 +64,50 @@ export default function Home(props)
     const date = new Date(time);
     return date.toISOString().split('T')[0];
 }
-useEffect(() => {
-    if (!auth.currentUser) {
-        signInAnonymously(auth).then(() => {
-            console.log('signed in anonymously');
-        }).catch((e) => {
-            console.log(`ERROR ${e}`);
-        });
+const {modal, setModal} = useModal();
+  
+  async function loadName () {
+    
+    try {
+        
+        let temp = await AsyncStorage.getItem('fname');
+    if (!!temp) {
+        setName(temp);
+        return true;
+    } else {
+        return false;
     }
+    } catch (e) {
+        return false;
+    }
+    
+    
+}
+
+useEffect(() => {
+  async function initialize() {
+    try {
+      const found = await loadName();
+      setModal(!found); // Show modal if name is not found
+    } catch (e) {
+      console.error('Error in loadName:', e);
+      setModal(true); // Show modal on error
+    } finally {
+      SplashScreen.hideAsync(); // Ensure splash screen hides
+    }
+  }
+
+  initialize();
+},[])
+useEffect(() => {
+  navigation.setOptions({
+    headerTitle: (props) => <Hheader {...props} name={name} />,
+  });
+}, [name]);
+
+
+useEffect(() => {
+    
 
     const checkPermissions = async () => {
         const { status } = await Location.getForegroundPermissionsAsync();
@@ -78,35 +125,14 @@ useEffect(() => {
                 const { coords } = await Location.getCurrentPositionAsync({});
                 setLocation(coords);
                 console.log(coords);
+            } else {
+                setLocation(null);
             }
         }
     };
     checkPermissions();
 
-    return auth.onAuthStateChanged(async (user) => {
-        try {
-            if (user) {
-                console.log('fetching....')
-                const token = await getIdToken(user);
-                //const response = await fetch('https://api-bkrf4j3bwa-uc.a.run.app/maps/nearby?lat=34.075956&lng=-84.352815');
-                const response = await fetch ("https://api-bkrf4j3bwa-uc.a.run.app", {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                if (response.ok) {
-                    //const data = await response.json();
-                    console.log(response);
-                } else {
-                    console.log(`error fetching data ${response.status}`);
-                }
-            }
-        } catch (e) {
-            console.log(e);
-        }
-
-    });
+    
 
 },[])
 
@@ -141,9 +167,20 @@ const loadItems = (day) => {
 };
    return (
 
-    <SafeAreaView style = {[styles.safe, {marginVertical: 20,}]} >
+    <SafeAreaView style = {[styles.safe, {marginVertical: 0,}]} >
+        
+        <Modal visible = {modal} onRequestClose = {() => setModal(false)} animationType = "slide" presentationStyle="pageSheet" >
+            
+                <Intro ></Intro>
+            
+        </Modal>
         <View style = {{width: '100%', flex: 0.2}} >
-        <MasjidDropdown  loc ={location ?? 'yeah'}/>
+        {location == undefined ? (
+        <ActivityIndicator size = 'small' color = 'green' />
+        ) : (
+        <MasjidDropdown  loc ={location}/>
+        )
+        }
         </View>
         <View style = {styles.container} />
         <View style = {{flex:1, width: '90%', marginTop: 50,marginBottom: 30, borderRadius: 50, backgroundColor: 'yellow'}}>

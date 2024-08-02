@@ -3,9 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {sorter, getDistanceFromLatLonInMi} from "./sorter";
-const data = [
-
-];
 
 let listofmosques = [
     {
@@ -28,29 +25,29 @@ let listofmosques = [
         lat: 34.03071,
         lng:-84.34033,
     },
+];
 
-
-
-]
 const MasjidDropdown = ({loc}) => {
-    const [sortedMosques, setSortedMosques] = useState(listofmosques);
     const [selected, setSelected] = useState([]);
+    const [mosqueData, setMosqueData] = useState([]);
+
     useEffect(() => {
+        let data;
         if (loc) {
             const { latitude, longitude } = loc;
-            if (latitude && longitude) {
-                const sorted = sorter(listofmosques, latitude, longitude);
-                setSortedMosques(sorted);
-            }
+            const sorted = sorter(listofmosques, latitude, longitude);
+            data = sorted.map(mosque => ({
+                label: `${mosque.name} (${getDistanceFromLatLonInMi(latitude, longitude, mosque.lat, mosque.lng).toFixed(1)} mi)`,
+                value: mosque.name,
+            }));
+        } else {
+            data = listofmosques.map(mosque => ({
+                label: mosque.name,
+                value: mosque.name,
+            }));
         }
+        setMosqueData(data);
     }, [loc]);
-
-    const mosqueData = sortedMosques.map(mosque => ({
-        label: `${mosque.name} (${getDistanceFromLatLonInMi(loc.latitude, loc.longitude, mosque.lat, mosque.lng).toFixed(1)} mi)`,
-        value: mosque.name,
-    }));
-
-
 
     return (
         <View style={styles.container}>

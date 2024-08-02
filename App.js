@@ -5,7 +5,7 @@ import Home from './(app)/Home';
 import Home2 from './(app)/Home2';
 import Details from './(app)/details';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import HijriJS from './assets/Hijri';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Hheader from './components/hheader';
@@ -13,16 +13,22 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Intro from './(app)/intro';
+import { ModalProvider, useModal } from './context/AuthContext';
+import * as SplashScreen from 'expo-splash-screen'
 
 
 
-
-
+SplashScreen.preventAutoHideAsync();
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
+
+
 function MainNav() {
+ const {name, setName} = useModal();
+  
   const styles = StyleSheet.create({
     icon: {
       borderRadius: 50,
@@ -39,9 +45,7 @@ function MainNav() {
           backgroundColor: '#fff',
       }
   });
-    useEffect(() => {
-
-    }, []);
+    
 
   return (
       <Tab.Navigator
@@ -69,7 +73,9 @@ function MainNav() {
       <Tab.Screen
         name='home'
         component={Home}
-        options={{ headerTitle: (props) => <Hheader {...props} name='Ibrahim' /> }}
+        options={{ headerTitle: (props) => <Hheader {...props} name={name} /> ,
+                    }}
+        
       />
       <Tab.Screen
         name='settings'
@@ -85,10 +91,11 @@ function MainNav() {
 export default function App() {
   return (
     <React.StrictMode>
-
+      <ModalProvider>
       <NavigationContainer>
         <MainNav />
       </NavigationContainer>
+      </ModalProvider>
 
     </React.StrictMode>
   );
