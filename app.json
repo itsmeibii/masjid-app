@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "main-app",
-    "slug": "main-app",
+    "name": "Halaqah",
+    "slug": "HalaqahApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,6 +23,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "921ccea8-c78d-4cc1-b057-6dd63c3c77c4"
+      }
     }
   }
 }

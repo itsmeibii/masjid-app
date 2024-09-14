@@ -3,62 +3,67 @@ import { StyleSheet, View } from 'react-native';
 import { MultiSelect } from 'react-native-element-dropdown';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {sorter, getDistanceFromLatLonInMi} from "./sorter";
+import { useModal } from '../context/AuthContext';
+import util from 'util';
 
-let listofmosques = [
-    {
-        name: 'Gwinnett Islamic Circle',
-        lat: 34.02732,
-        lng:-84.04733
-    },
-    {
-        name: 'Hamzah Islamic Center',
-        lat: 34.11766,
-        lng:-84.24867,
-    },
-    {
-        name: 'Islamic Center of North Fulton',
-        lat: 34.07376,
-        lng:-84.32345,
-    },
-    {
-        name: 'Roswell Community Masjid',
-        lat: 34.03071,
-        lng:-84.34033,
-    },
-];
 
-const MasjidDropdown = ({loc}) => {
+
+
+let mosques;
+
+
+
+
+const MasjidDropdown = ({data , loc}) => {
+    
     const [selected, setSelected] = useState([]);
-    const [mosqueData, setMosqueData] = useState([]);
+    const {isAppReady} = useModal();
+    
 
-    useEffect(() => {
-        let data;
-        if (loc) {
-            const { latitude, longitude } = loc;
-            const sorted = sorter(listofmosques, latitude, longitude);
-            data = sorted.map(mosque => ({
-                label: `${mosque.name} (${getDistanceFromLatLonInMi(latitude, longitude, mosque.lat, mosque.lng).toFixed(1)} mi)`,
-                value: mosque.name,
-            }));
+    if (!isAppReady) {
+        return null
+    }
+    function format() {
+        
+        const {latitude, longitude} = loc;
+        if (loc) {  
+            
+            return data
+      .map(mosque => ({
+        label: `${mosque.Masjid} (${getDistanceFromLatLonInMi(latitude, longitude, mosque.loc._latitude, mosque.loc._longitude).toFixed(1)} mi)`,
+        value: mosque.Masjid,
+        distance: getDistanceFromLatLonInMi(latitude, longitude, mosque.loc._latitude, mosque.loc._longitude)
+      }))
+      .sort((a, b) => a.distance - b.distance) // Sort by distance
+      .map(mosque => ({
+        label: mosque.label,
+        value: mosque.value,
+      }));
+        
+        
         } else {
-            data = listofmosques.map(mosque => ({
-                label: mosque.name,
-                value: mosque.name,
-            }));
+          return data.map(mosque => ({
+            label: mosque.Masjid,
+            value: mosque.Masjid,
+          }));
         }
-        setMosqueData(data);
-    }, [loc]);
+    }
+   
+    
+    
+    
 
     return (
         <View style={styles.container}>
-            <MultiSelect
+            
+                <MultiSelect
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
                 selectedTextStyle={styles.selectedTextStyle}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 search
-                data={mosqueData}
+                data={format()}
                 labelField="label"
                 valueField="value"
                 placeholder="Select item"
@@ -78,6 +83,8 @@ const MasjidDropdown = ({loc}) => {
                 )}
                 selectedStyle={styles.selectedStyle}
             />
+            
+            
         </View>
     );
 };

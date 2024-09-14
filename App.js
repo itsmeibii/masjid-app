@@ -2,8 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, Image , TouchableOpacity, TouchableHighlight} from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import Home from './(app)/Home';
-import Home2 from './(app)/Home2';
-import Details from './(app)/details';
+import Event from './(app)/Event';
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import HijriJS from './assets/Hijri';
@@ -16,10 +16,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Intro from './(app)/intro';
 import { ModalProvider, useModal } from './context/AuthContext';
 import * as SplashScreen from 'expo-splash-screen'
+import { PaperProvider } from 'react-native-paper';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useFonts } from 'expo-font';
 
 
 
-SplashScreen.preventAutoHideAsync();
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -52,35 +55,33 @@ function MainNav() {
 
           screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
-                  let iconName;
-                  if (route.name === 'home') {
-                      iconName = 'mosque';
-                      const IconComponent = focused ? MaterialIcons : MaterialCommunityIcons;
-                      return <IconComponent name={iconName} size={size} color={color} style={styles.icon} />;
-                  } else if (route.name === 'settings') {
-                      iconName = 'person' + (focused ? '' : '-outline');
-                      return <MaterialIcons name={iconName} size={size} color={color} style={styles.icon} />;
-                  }
+                  
+                if (route.name === 'Home') {
+                  return <AntDesign name = 'home' color = {focused ? 'blue' : 'black'} size = {size} /> 
+                } else {
+                  return <Ionicons name = 'calendar-outline' color = {focused ? 'blue' : 'black'} size = {size} />
+                }
               },
-              tabBarActiveTintColor: 'green',
-              tabBarInactiveTintColor: 'gray',
-              tabBarActiveBackgroundColor: '#bed558',
-              tabBarStyle: styles.tabBar,
+              
+              //calendar-outline Ionicons
+              //home antdesign
+              
               lazy: false,
+              headerShown: false,
           })}
-          initialRouteName='home'
+          initialRouteName='Events'
       >
       <Tab.Screen
-        name='home'
+        name='Home'
         component={Home}
         options={{ headerTitle: (props) => <Hheader {...props} name={name} /> ,
                     }}
         
       />
       <Tab.Screen
-        name='settings'
-        component={Home2}
-        options={{ title: 'My Settings' }}
+        name='Events'
+        component={Event}
+        options={{ title: 'My Events' }}
       />
     </Tab.Navigator>
   );
@@ -89,14 +90,25 @@ function MainNav() {
 
 
 export default function App() {
+  const [loaded] = useFonts({
+    RobotoFlexSB: require('./assets/fonts/RobotoFlex-SB.ttf'),
+    RobotoFlexREG: require('./assets/fonts/RobotoFlex-REG.ttf'),
+    RobotoFlexBOLD: require('./assets/fonts/RobotoFlex-BOLD.ttf'),
+    'RobotoFlexMED': require('./assets/fonts/RobotoFlex-MED.ttf'),
+    RobotoFlexEL: require('./assets/fonts/RobotoFlex-EL.ttf'),
+  })
+  if (!loaded) {
+    return null;
+  }
   return (
-    <React.StrictMode>
+     <PaperProvider>
       <ModalProvider>
       <NavigationContainer>
         <MainNav />
       </NavigationContainer>
       </ModalProvider>
+      </PaperProvider>
 
-    </React.StrictMode>
+    
   );
 }
