@@ -6,7 +6,8 @@ import Exclamation from 'react-native-vector-icons/EvilIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Entypo, Feather, AntDesign } from '@expo/vector-icons';
 
-const EventElement = ({ data }) => {
+
+const EventElement = ({ data, isfirst }) => {
   let eventName, location, time, date, extraInfo;
   const screenWidth = Dimensions.get('window').width;
   const [loading, setLoading] = useState(false);
@@ -87,12 +88,14 @@ const EventElement = ({ data }) => {
     return `${dayOfWeek} ${dayOfMonth}${daySuffix} ${monthName}, ${year}`;
   }
 
-  const handleReport = async () => {
+  const handleReport = async (email) => {
     if (!selected) {
       Alert.alert('Error', 'Please select a reason');
       return;
     }
-    let email = await AsyncStorage.getItem('email');
+    try {
+      
+    
     const response = await fetch ('https://express-linux-970266916925.us-east1.run.app/submitreport', {
       method: 'POST',
       headers: {
@@ -106,6 +109,7 @@ const EventElement = ({ data }) => {
       }),
 
     })
+  
     if (response.status == 400) {
       Alert.alert('Error', 'Cannot submit duplicate report');
     } else if (response.status == 200) {
@@ -113,6 +117,9 @@ const EventElement = ({ data }) => {
     } else {
       Alert.alert('Error', 'Something went wrong while submitting the report');
     }
+  } catch (e) {
+    Alert.alert('Error', e);
+  }
   };
 
   const styles = StyleSheet.create({
@@ -284,7 +291,22 @@ const EventElement = ({ data }) => {
               <View style = {{flexDirection: 'row', justifyContent: 'center', width: '100%', height: 44, marginTop: 5,}}>
                 <Button  style = {{width: 156, height: '100%', borderRadius: 100, marginRight: 9}} buttonColor = '#0D6CFC' mode = 'contained' onPress={() => setReportVisible(false)}>Cancel</Button>
                 <Button style = {{width: 156, height: '100%', borderRadius: 100,}} buttonColor = '#FF5B47' mode = 'contained' 
-                icon = {() => <AntDesign name = 'exclamationcircleo' size = {23} color = 'white'/>} onPress = {() =>  {
+                icon = {() => <AntDesign name = 'exclamationcircleo' size = {23} color = 'white'/>} onPress = {async () =>  {
+                  let stored = await AsyncStorage.getItem('email');
+                  if (!stored) {
+                  Alert.prompt('Please enter your email to submit with the report', 'This info will not be shared', async (email) => {
+                    if (!email) {
+                      Alert.alert('Error', 'Please enter an email to submit the report');
+                      return;
+                    }
+                    await AsyncStorage.setItem('email', email);
+                    await handleReport(email);
+                  
+                  });
+                } else {
+                  await handleReport(stored);
+                }
+                  
                   setVisible(false);
                   setReportVisible(true)
                   }}><Text style = {{fontWeight: 800,}}>Report</Text></Button>
@@ -295,6 +317,9 @@ const EventElement = ({ data }) => {
 
         </Dialog>
       </Portal>
+      {isfirst && (
+        <View style = {{width: 353, height: 1, borderTopWidth: 1, borderTopColor:'rgba(0,0,0,0.2)', marginVertical: 15,}} />
+      )}
           <View style = {{width: 353,  height: 120, overflow: 'auto',    flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', borderRadius: 12, marginVertical: 4, 
             ...Platform.select({
               ios: {
@@ -314,8 +339,8 @@ const EventElement = ({ data }) => {
               <View style = {{flex: 0.7, height: '80%', marginLeft: 16, justifyContent: 'space-between', }}>
                 <View style = {{flex: 1, justifyContent: 'space-around'}}>
                   <Text style = {{fontSize: 16, fontWeight: 700, color: data.color}}>{truncateString(capitalize(eventName))}</Text>
-                  <Text style = {{fontFamily: 'RobotoFlexBOLD', fontSize: 12, lineHeight: 14, color: 'rgba(0,0,0,0,8)'}}>{formatDate(date)}</Text>
-                  <Text style = {{fontFamily: 'RobotoFlexSB', fontSize: 11, lineHeight: 13, color: 'rgba(0,0,0,0,8)'}}>{time.trim()}</Text>
+                  <Text style = {{fontFamily: 'RobotoFlexBOLD', fontSize: 12, lineHeight: 14, color: 'rgba(0,0,0,0.8)'}}>{formatDate(date)}</Text>
+                  <Text style = {{fontFamily: 'RobotoFlexSB', fontSize: 11, lineHeight: 13, color: 'rgba(0,0,0,0.8)'}}>{time.trim()}</Text>
                 </View>
               </View>
               <View style = {{flex: 0.3, height: '100%', justifyContent: 'center', alignItems: 'center'}}>

@@ -30,7 +30,7 @@ export const useModal = () => {
 
 // Create a Provider component
 export const ModalProvider = ({ children }) => {
-  const [modal, setModal] = useState(false);
+  const [modal, setModal,] = useState(false);
   const [name, setName] = useState('');
   const [location, setLocation] = useState(undefined);
   const [mosqueData, setMosqueData] = useState(null); // Initialize to null

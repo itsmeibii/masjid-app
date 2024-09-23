@@ -4,11 +4,14 @@ import Feather from '@expo/vector-icons/Feather';
 import { Menu } from 'react-native-paper';
 import { useModal } from '../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker, Switch} from 'react-native-ui-lib';
 
-const EventSearch = ({setValue}) => {
+const EventSearch = ({setValue, value, past, setSearchQuery}) => {
     const [focused, setFocused] = useState(false);
     const rotation = useRef(new Animated.Value(0)).current;  // Animated value for rotation
+    
     const [visible, setVisible] = useState(false);
+    const [search, setSearch] = useState('');
     
     
     async function handleFilter(filter) {
@@ -18,6 +21,10 @@ const EventSearch = ({setValue}) => {
         
        
     }
+    const handleSearch = (text) => {
+      setSearch(text);
+      setSearchQuery(text);  // Pass search value to parent
+    };
   // Function to rotate the icon with easing
   const rotateIcon = () => {
     Animated.timing(rotation, {
@@ -50,9 +57,10 @@ const EventSearch = ({setValue}) => {
         <Animated.View style = {[{marginLeft: 12, marginRight: 8,}, {transform: [{rotate: rotateInterpolate}]}]}>
       <Feather name="search" size={24} color="rgba(0,0,0,0.6)" />
       </Animated.View>
-    <TextInput autoCapitalize='none' placeholder = 'Search Events'  style = {{height: 20, width: 244, fontFamily: 'RobotoFlexMED', fontSize: 17,}} onFocus = {rotateIcon} onBlur = {resetRotation}/>
+    <TextInput value = {search} onChangeText = {handleSearch} autoCapitalize='none' placeholder = 'Search Events'  style = {{height: 20, width: 244, fontFamily: 'RobotoFlexMED', fontSize: 17,}} onFocus = {rotateIcon} onBlur = {resetRotation}/>
     </View>
-
+    
+    
     
     <Menu 
     visible = {visible}

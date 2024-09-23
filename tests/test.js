@@ -61,9 +61,9 @@ function getNextPrayer(masjid) {
     let next;
     for (let prayer of prayerOrder) {
         if (prayer.substring(0,1) !== 'J') {
-        console.log(`${prayer} : ${convertTo24HourTime(masjid.current[prayer])}`);
+        
         if (convertTo24HourTime(masjid.current[prayer]) > getCurrent24HourTime()) {
-            console.log(getCurrent24HourTime())
+            
             
             next = {Prayer: prayer, Time: masjid.current[prayer]};
             break;

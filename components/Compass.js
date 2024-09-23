@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Image, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+
+
 import { useModal } from '../context/AuthContext';
 
 const { width } = Dimensions.get('window');
 const compassSize = width * 0.8;  // Size of the compass (80% of screen width)
 
-export default function Compass({location}) {
+export default function Compass({location, visible}) {
+  
   const [errorMsg, setErrorMsg] = useState(null);
   const heading = useSharedValue(0);
   const qiblaHeading = useRef(0);
@@ -49,6 +52,7 @@ export default function Compass({location}) {
               easing: Easing.linear,
             });
             setKaabahRotation(accumulatedHeading.current);
+            
           } else {
             console.error('Invalid heading data:', headingData);
           }

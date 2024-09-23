@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, View, Alert, Linking, Pressable, TouchableOpacity, Platform} from 'react-native'
-import React, {useState} from 'react'
-import { setStatusBarHidden } from 'expo-status-bar'
+import React from 'react'
+
 import Icon from 'react-native-vector-icons/FontAwesome6'
 import * as Clipboard from 'expo-clipboard'
 import Feather from 'react-native-vector-icons/Feather'

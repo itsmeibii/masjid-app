@@ -7,6 +7,7 @@ const PrayerList = ({data, onRowPress}) => {
     React.useEffect(() => {
         if (data) {
             setTimes(data);
+            
         }
     }, [data])
     if (!times) {

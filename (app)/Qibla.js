@@ -3,12 +3,12 @@ import React from 'react'
 import Compass from '../components/Compass'
 import { useModal } from '../context/AuthContext'
 
-const Qibla = () => {
+const Qibla = ({visible}) => {
   const {location: loc } = useModal()
   return (
     <View style = {{flex: 1, alignItems: 'center'}}>
       <Text style = {{fontSize: 30, fontWeight: 700, marginTop: 80,}}>Qibla Compass</Text>
-      <Compass location = {loc}/>
+      <Compass location = {loc} visible = {visible}/>
     </View>
   )
 }

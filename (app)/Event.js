@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, ScrollView } from 'react-native';
-import { Magnetometer } from 'expo-sensors';
+
 import { useModal } from '../context/AuthContext';
 import EventTable from '../components/EventTable';
-import TableSkeleton from '../components/TableSkeleton';
-import EventSearch from '../components/EventSearch';
-import { Picker } from 'react-native';
+
 
 export default function Event(props) {
     
@@ -28,7 +26,7 @@ export default function Event(props) {
     });
 
     if (!isAppReady) {
-        return <TableSkeleton />;
+        return <ActivityIndicator size="large" color="green" />;
     } else if (!mosqueData) {
         return <ActivityIndicator size="large" color="green" />;
       }

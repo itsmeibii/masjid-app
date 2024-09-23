@@ -8,10 +8,20 @@ const MosqueCard = ({mosqueData, onPress}) => {
   function timeUntil(timeString) {
     const now = new Date(); // Get current date and time
   
-    // Split the input time string into its components
-    const [time, modifier] = timeString.split(' ');
-    let [hours, minutes] = time.split(':').map(Number);
-  
+    // Regular expression to match time and optional space before AM/PM (case-insensitive)
+    const timeRegex = /^(\d{1,2}):(\d{2})\s*([aApP][mM])$/;
+    const match = timeString.match(timeRegex);
+    
+    if (!match) {
+      throw new Error('Invalid time format');
+    }
+    
+    // Extract hours, minutes, and AM/PM modifier
+    let [_, hours, minutes, modifier] = match;
+    hours = Number(hours);
+    minutes = Number(minutes);
+    modifier = modifier.toUpperCase(); // Normalize to uppercase AM/PM
+    
     // Convert the 12-hour time to 24-hour format based on AM/PM
     if (modifier === 'PM' && hours < 12) {
       hours += 12;
@@ -47,6 +57,8 @@ const MosqueCard = ({mosqueData, onPress}) => {
   }
   
   
+  
+  
   const {nextPrayer} = useModal();
   
   return (
@@ -69,7 +81,7 @@ const MosqueCard = ({mosqueData, onPress}) => {
         <BlurView intensity={32} style = {{width: '100%', flex: 1, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center', alignItems: 'center' }} >
           <Text style = {{fontFamily: 'RobotoFlexSB', fontSize: 13, color: 'white', marginBottom: 8}}>{nextPrayer.Time}</Text>
           <View style = {{alignItems: 'center'}}>
-          <Text style = {{fontFamiyl: 'RobotoFlexMED', fontSize: 10, color: 'white', }}>{timeUntil(nextPrayer.Time)}</Text>
+          <Text style = {{fontFamiyl: 'RobotoFlexMED', fontSize: 10, color: 'white', textAlign: 'center' }}>{timeUntil(nextPrayer.Time)}</Text>
           </View>
         </BlurView>
         </View>

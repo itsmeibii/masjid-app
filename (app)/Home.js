@@ -1,32 +1,14 @@
 import React, {useEffect, useState} from 'react'
-import {ActivityIndicator, Button, Platform, SafeAreaView, StyleSheet, View, Text, ImageBackground, TouchableOpacity, Image} from 'react-native'
-
-
-import MasjidDropdown from "../components/MasjidDropdown";
-
-
-import { Modal } from 'react-native';
-import Intro from './intro';
-import Hheader from '../components/hheader';
-import * as SplashScreen from 'expo-splash-screen'
+import {ActivityIndicator, Platform, SafeAreaView, StyleSheet, View, Text,TouchableOpacity, Image, Alert, Pressable, Modal} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import PrayerTable from '../components/prayertable';
-import TableSkeleton from '../components/TableSkeleton';
 import MosqueInfo from './MosqueInfo';
-import Kaabah from 'react-native-vector-icons/FontAwesome5'
-import { IconButton } from 'react-native-paper';
 import HijriJS from '../assets/Hijri';
 import MosqueCard from '../components/MosqueCard';
 import PrayerList from '../components/PrayerList';
-
-
-
-
 import { useModal } from '../context/AuthContext';
-
 import { StatusBar } from 'expo-status-bar';
 import Qibla from './Qibla';
-import {useFonts} from 'expo-font';
+
 
 
 
@@ -71,98 +53,7 @@ export default function Home({navigation})
       // Insert a comma before the year
       return formattedDate.replace(/ (\d{4})$/, ', $1');
     }
-    function convertTo24HourTime(timeString) {
-      // Extract the period (AM/PM)
-      const period = timeString.slice(-2);
-      
-      // Extract the hour and minute parts
-      let [hours, minutes] = timeString.slice(0, -2).split(':');
-      hours = parseInt(hours, 10);
     
-      // Convert to 24-hour format
-      if (period === 'PM' && hours !== 12) {
-        hours += 12;
-      }
-      if (period === 'AM' && hours === 12) {
-        hours = 0;
-      }
-    
-      // Ensure hours and minutes are in two-digit format
-      hours = hours < 10 ? `0${hours}` : hours;
-      minutes = minutes.padStart(2, '0');
-    
-      return `${hours}:${minutes}`;
-    }
-    
-    function getCurrent24HourTime() {
-      const now = new Date();
-    
-      // Get hours and minutes
-      let hours = now.getHours();
-      const minutes = now.getMinutes();
-    
-      // Format hours and minutes to always be two digits
-      hours = hours < 10 ? `0${hours}` : hours;
-      const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    
-      // Return the formatted time
-      return `${hours}:${formattedMinutes}`;
-    }
-    
-    
-    function isTomorrowMatchingDate(monthDayString) {
-        // Parse the month and day from the string
-        const [month, day] = monthDayString.split('/').map(Number);
-      
-        // Get today's date
-        const today = new Date();
-      
-        // Get tomorrow's date
-        const tomorrow = new Date(today);
-        tomorrow.setDate(today.getDate() + 1);
-      
-        // Check if tomorrow's month and day match the given string
-        const isMatch =
-          tomorrow.getMonth() + 1 === month && tomorrow.getDate() === day;
-      
-        return isMatch;
-    }
-    
-    function getNextPrayer(masjid) {
-        const prayerOrder = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-        let next = {};
-        for (let prayer of prayerOrder) {
-            if (prayer.substring(0,1) !== 'J') {
-            
-            if (convertTo24HourTime(masjid.current[prayer]) > getCurrent24HourTime()) {
-                
-                
-                next = {Prayer: prayer, Time: masjid.current[prayer]};
-                break;
-            }
-        }
-        }
-        if (!next) {
-            //check if there is a change in tommorows fajr
-            next.Prayer = 'Fajr';
-                let updated = masjid?.upcomingChanges;
-                if (updated) {
-                    for (let date of updated) {
-                        if (isTomorrowMatchingDate(date.effectiveDate.substring(0,4))) {
-                            next.Time = date.updatedPrayers?.Fajr ?? masjid.current.Fajr;
-                        }
-                    }
-                }
-            if (!next?.Time) {
-                next.Time = masjid.current.Fajr;
-            }
-    
-            
-            
-        }
-        
-        return next;
-    }
     
    
 
@@ -286,23 +177,30 @@ if (!mosqueData ||  !nextPrayer) {
              <StatusBar style="dark" />
         
         
-              <Modal visible = {modal} onRequestClose = {() => setModal(false)} animationType = "slide" presentationStyle="pageSheet" >
+              {/* <Modal visible = {modal} onRequestClose = {() => setModal(false)} animationType = "slide" presentationStyle="fullScreen" >
                   
                       <Intro ></Intro>
                   
-              </Modal>
+              </Modal> */}
                <Modal visible = {mosqueModal} onRequestClose = {() => setMosqueModal(false)} animationType = "slide" presentationStyle="pageSheet" >
                  <MosqueInfo mosque = {selectedMosque} close = {() => setMosqueModal(false)} />
                  </Modal>
-                 <Modal visible = {qiblaModal} onRequestClose={() => setQiblaModal(false)} animationType='slide' presentationStyle='pageSheet' >
-                   <Qibla loc = {location} close = {() => setQiblaModal(false)}/>
+                 <Modal visible = {qiblaModal} onRequestClose={() => setQiblaModal(false)} animationType='slide' presentationStyle='pageSheet' onDismiss = {() => setQiblaModal(false)} >
+                   <Qibla loc = {location} close = {() => setQiblaModal(false)} visible = {qiblaModal}/>
                  </Modal>
       <View style = {{height: 48, width: 353,  flexDirection: 'row', marginTop: 15, alignItems: 'center'}}>
         <View style = {{width: 266, height: 48, alignItems: 'flex-start',  justifyContent: 'space-between'}}>
-          <Text style = {{fontFamily: 'RobotoFlexEL',  fontSize: 15, fontWeight: 800}}> Hi, {name}! </Text>
+          <View style = {{flexDirection: 'row', alignItems: 'center'}}>
+          <Text style = {{fontFamily: 'RobotoFlexEL',  fontSize: 15, fontWeight: 800}}> Hi, </Text>
+          <Pressable onPress = {async () => {
+          Alert.prompt('Enter your name', 'Please enter your name',async(name) => {await AsyncStorage.setItem('name', name); setName(name); })
+          }}>
+          <Text style = {{fontWeight: 800, fontSize: 16}}>{name || 'Guest'}!</Text>
+          </Pressable>
+          </View>
           <Text style = {{fontFamily: 'RobotoFlexSB', fontSize: 24, }}>Assalamualaykum!</Text>
         </View>
-        <View style = {{flex: 1,height: 40,  alignItems: 'flex-end' }}>
+        <View style = {{height: 40,  alignItems: 'flex-end' , }}>
           <Text style = {{fontFamily: 'RobotoFlexEL',fontSize: 14,  color: 'rgba(51,51,51,0.8)', marginBottom: 5,}}>{convertHijriDate(date)}</Text>
           <Text style = {{fontSize: 14, fontFamily: 'RobotoFlexEL', color: 'rgba(51,51,51,0.8)'}}>{formatDate(new Date())}</Text>
         </View>
@@ -315,7 +213,7 @@ if (!mosqueData ||  !nextPrayer) {
           setMosqueModal(true);
         }}/>
       <TouchableOpacity onPress = {() => setQiblaModal(true)}>
-        <View style = {{position: 'absolute', height: 70, width: 70, borderRadius: '50%', backgroundColor: '#D9ED92', justifyContent: 'center', alignItems: 'center', top: 300, left: 100,
+        <View style = {{position: 'absolute', height: 70, width: 70, borderRadius: '50%', backgroundColor: '#D9ED92', justifyContent: 'center', alignItems: 'center', bottom: 10, left: 110,
           ...Platform.select({
             android: {
                 elevation: 5,
@@ -326,7 +224,7 @@ if (!mosqueData ||  !nextPrayer) {
                 shadowOpacity: 0.8,
                 shadowRadius: 9,
             },
-            default : {}
+           
           })
         }}>
             <Image source  = {require('../assets/kaabah.png')} style = {{height: 45, width: 45,}} />
