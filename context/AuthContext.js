@@ -152,6 +152,7 @@ export const ModalProvider = ({ children }) => {
     
     //
     const response = await fetch ('https://express-linux-bkrf4j3bwa-ue.a.run.app/allevents');
+    console.log();
     
     const data = await response.json();
     console.log('Data:', data);
