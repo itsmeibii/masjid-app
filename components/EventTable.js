@@ -20,12 +20,12 @@ const colors = {
 const EventTable = ({ events, prayerData }) => {
     const [sorted, setSorted] = useState([]);
     const [unsorted, setUnsorted] = useState([]);
-    const [value, setValue] = useState('Masjid');
+    const [value, setValue] = useState('Time');
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [showPastEvents, setShowPastEvents] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');  // New state to track search input
-    const [showUnspecifiedEvents, setShowUnspecifiedEvents] = useState(true);
+    const [showUnspecifiedEvents, setShowUnspecifiedEvents] = useState(false);
   
     
 
@@ -137,18 +137,7 @@ const EventTable = ({ events, prayerData }) => {
     
 
     const keyExtractor = (item, index) => `${item.uniqueIdentifier || index}-${item.Date}`;
-    async function loadFilter() {
-      setLoading(true);
-      try {
-        let temp = await AsyncStorage.getItem('filter');
-        if (temp) {
-          setValue(temp);
-        }
-        setLoading(false);
-      } catch (e) {
-        throw e;
-      }
-    }
+    
   
     function filterRemoveEvents(events) {
         const now = new Date();
@@ -272,13 +261,13 @@ const EventTable = ({ events, prayerData }) => {
     useEffect(() => {
       let filteredData = value === 'Masjid' ? unsorted : sorted;
       let temp = filteredData.filter((event) => event.dateObj === null);
-            console.log('YESS' + temp.length)
+            
         
       
         
     filteredData = filterRemoveEvents(filteredData);
     temp = filteredData.filter((event) => event.dateObj === null);
-    console.log('AFTER FILTERING' + temp.length)
+    
       
       
       filteredData = filterBySearch(filteredData);  // Apply search filter here
@@ -298,7 +287,7 @@ const EventTable = ({ events, prayerData }) => {
             </View>
             <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'center',}}>
             <Text style = {{marginRight: 5, marginLeft: 10, fontSize: 10,}}>Show Unspecified Events</Text>
-            <Switch value={showUnspecifiedEvents} onValueChange={() => {setShowUnspecifiedEvents(!showUnspecifiedEvents); console.log(!showUnspecifiedEvents)}} />
+            <Switch value={showUnspecifiedEvents} onValueChange={() => {setShowUnspecifiedEvents(!showUnspecifiedEvents); }} />
             </View>
         </View>
   

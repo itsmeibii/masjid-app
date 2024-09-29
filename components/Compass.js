@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Image, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
+import { MaterialIcons } from '@expo/vector-icons';
 
 
 import { useModal } from '../context/AuthContext';
@@ -87,6 +88,7 @@ export default function Compass({location, visible}) {
   return (
     <View style={styles.container}>
       {errorMsg ? <Text style={styles.error}>{errorMsg}</Text> : null}
+      <MaterialIcons name = 'keyboard-double-arrow-up' size = {30} color = 'black' />
       <Animated.View style={[animatedStyle, { width: compassSize, height: compassSize }]}>
         <Image style={styles.compass} source={require('../assets/QCompass.png')} />
         <Image
@@ -137,7 +139,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
     overflow: 'visible',
   },
   compass: {

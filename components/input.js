@@ -30,7 +30,7 @@ const UserInput = forwardRef(({ style = null,fontSize = null, uinfo = false,show
       height, 
       width,
       backgroundColor: '#DFDFDF',
-      borderRadius: '10%',
+      borderRadius: 10,
       flexDirection: 'row',
       alignItems: 'center',
       marginVertical: 20,

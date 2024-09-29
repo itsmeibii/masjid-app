@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, Text, View, Image , TouchableOpacity} from 'react-native'
+import { Platform, StyleSheet, Text, View, Image , TouchableOpacity, AppState} from 'react-native'
 import React from 'react'
 import {Button} from 'react-native-paper'
 
@@ -6,11 +6,14 @@ import {Button} from 'react-native-paper'
 const Prayer = ({data, onRowPress, index}) => {
     const [future, setFuture] = React.useState({show: false});
     
+    const [appState, setAppState] = React.useState(AppState.currentState);
     const [nextPrayer, setNextPrayer] = React.useState(null);
     const {Masjid: name, imageURL: image, current} = data;
     const {Fajr, Zuhr, Asr, Maghrib, Isha} = current;
-    const prayers = ['Fajr', 'Zuhr', 'Asr', 'Maghrib', 'Isha'];
+    const prayers = ['Fajr', 'Zuhr', 'Dhuhr', 'Thuhr', 'Asr', 'Maghrib', 'Isha'];
+    
     React.useEffect(() => {
+        function run() {
         if (data) {
             getNextPrayer(data);
             
@@ -55,13 +58,36 @@ const Prayer = ({data, onRowPress, index}) => {
             }
             
         }
+    }
+    run();
+    const handleAppStateChange = (nextAppState) => {
+        // Only trigger when the app comes to the foreground
+        if (appState.match(/inactive|background/) && nextAppState === 'active') {
+          
+          run(); // Rerun the effect logic when coming back to the foreground
+        }
+        setAppState(nextAppState);
+      };
+  
+      const subscription = AppState.addEventListener('change', handleAppStateChange);
+  
+      // Cleanup the listener when the component unmounts
+      return () => {
+        subscription.remove();
+      };
         
         
-    }, [data])
+    }, [data, appState])
     function convertTo24HourTime(timeString) {
         // Remove any spaces and convert the string to uppercase
-        timeString = timeString.replace(/\s+/g, '').toUpperCase();
-      
+        if (!timeString) {
+            return null;
+        }
+        
+        timeString = timeString.replace(/\s+/g, '')
+        
+        
+        timeString = timeString.toUpperCase();
         // Extract the period (AM/PM)
         const period = timeString.slice(-2);
       
@@ -153,7 +179,19 @@ const Prayer = ({data, onRowPress, index}) => {
           
           return setNextPrayer(next);
       }
+      function remspace(timeString) {
+        // Use regex to check if there is a space between HH:MM and AM/PM
+        if (/\d{1,2}:\d{2}\s[APMapm]{2}/.test(timeString)) {
+          // If space is found, remove it using replace
+          return timeString.replace(' ', '');
+        }
+        // Return the original string if no space is found
+        return timeString;
+      }
       function format(timeString) {
+        if (!timeString) {
+            return null;
+        }
         // Regular expression to match a time string that might not have a space between time and AM/PM
         const timeRegex = /^(\d{1,2}:\d{2})([aApP][mM])$/;
         
@@ -170,12 +208,13 @@ const Prayer = ({data, onRowPress, index}) => {
       if (!nextPrayer || !data ) {
         return null;
       }
+      
   return (
     <TouchableOpacity onPress = {() => {
         
         onRowPress(index)
-        }}>
-    <View style = {{width: 353, height: 160, borderRadius: 12, backgroundColor: 'white', marginVertical: 6, flexDirection: 'row', alignItems: 'center', 
+        }} style = {{width: '100%'}}>
+    <View style = {{width: '90%', height: 160, borderRadius: 12, backgroundColor: 'white', marginVertical: 6, flexDirection: 'row', alignItems: 'center', 
         ...Platform.select({
             ios: {
                 shadowColor: 'rgba(0,0,0,0.25)',
@@ -193,6 +232,7 @@ const Prayer = ({data, onRowPress, index}) => {
         <Image source = {{uri: image}} style = {{flex: 5, width: 96, borderRadius: 8}} />
         <View style = {{width: 96,  justifyContent: 'center', }}>
         <Text style = {{fontWeight: 600, fontSize: 12, textAlign: 'center', marginVertical: 2, }}>{name}</Text>
+        <Text style = {{fontWeight: 600, fontSize: 12, textAlign: 'center', marginVertical: 2, }}>({data.duration})</Text>
         </View>
         {data.upcomingChanges && (
         <TouchableOpacity style = {{ height: 20,}} onPress = {() => setFuture({...future, show: !future.show})}>
@@ -217,34 +257,80 @@ const Prayer = ({data, onRowPress, index}) => {
                     next = !next;
                 }
                 const time = current[prayer];
+                if (!time) {
+
+                    return null;
+                }
+                if (['Dhuhr', 'Zuhr', 'Thuhr'].includes(prayer)) {
+                    prayer = 'Zuhr';
+                }
                 return (
-                    <View style = {{height: '50%', width: '30%', justifyContent: 'space-around', alignItems: 'center', borderWidth: 1, borderColor: next ? 'black' : 'rgba(0,0,0,0.12)', borderRadius: 10, backgroundColor: next ? 'rgba(0,0,0,0.05)': 'white'}} key = {index}>
+                    <View style = {{height: '50%', width: '30%', justifyContent: 'space-around', alignItems: 'center', borderWidth: 1, borderColor: next ? 'black' : 'rgba(0,0,0,0.12)', borderRadius: 10, backgroundColor: next ? 'rgba(0,0,0,0.05)': 'white', textAlign: 'center'}} key = {index}>
                         <Text style = {{fontSize: 12, color: '#184E77'}}>{prayer}</Text>
                         <Text style = {{fontSize: 11, color: 'rgba(51,51,51,0.72)'}}>{format(time.trim())}</Text>
                     </View>
                 )
 
             })}
-            <View style = {{height: '50%', width: '30%', justifyContent: 'space-around', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(0,0,0,0.12)', borderRadius: 10,}}>
-                        <Text style = {{fontSize: 12, color: '#184E77'}}>Jummah</Text>
+            <View style = {{height: '50%',  justifyContent: 'space-around', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(0,0,0,0.12)', borderRadius: 10, textAlign: 'center'}}>
+                        <Text style = {{fontSize: 12, color: '#184E77', marginHorizontal: 3,}}>Jummah</Text>
                         <View>
-                        <Text style = {{fontSize: 12, color: 'rgba(51,51,51,0.72)'}}>{format(current['Jumu\'ah'])}</Text>
-                        {!!current['Jumu\'ah II'] ? <Text style = {{fontSize: 12, color: 'rgba(51,51,51,0.72)'}}>{format(current['Jumu\'ah II'])}</Text> : null}
+                        {/* <Text style = {{fontSize: 12, color: 'rgba(51,51,51,0.72)'}}>{format(current['Jumu\'ah'])}</Text>
+                        {!!current['Jumu\'ah II'] ? <Text style = {{fontSize: 12, color: 'rgba(51,51,51,0.72)'}}>{format(current['Jumu\'ah II'])}</Text> : null} */}
+                        {Object.keys(current).filter(key => key.startsWith('J')).map((key, index) => {
+                            return (
+                                <Text style = {{fontSize: 10, color: 'rgba(51,51,51,0.72)'}} key = {index}>{format(current[key])}</Text>
+                            )
+                        })}
                         </View>
             </View>
             </>
             
         ) : (
-            Object.entries(future.times).map(([prayer,time], index) => {
+            Object.entries(future.times).map(([prayer, time], index) => {
+                if (!time) {
+                    return null;
+                }
+            
+                // Ensure there's no extra space between HH:MM and AM/PM
                 
-                const [atime, date] = time.split(' ');
+                
+                let array = time.split(' ');
+                // If array length is more than 2, clean up the time string
+                if (array.length > 2) {
+                    // Fix space issue between HH:MM and AM/PM
+                    time = `${array[0]}${array[1]} ${array.slice(2).join(' ')}`;
+                    
+                } else {
+                    // Ensure proper format by removing space between HH:MM and AM/PM
+                    array[0] = array[0].replace(' ', '');
+                }
+                
+                const [atime, period, date] = time.split(' ');
+                
+                let formattedDate = period;
+                if (period && period.split('/').length === 3) {
+                    // Convert MM/DD/YYYY to MM/DD
+                    formattedDate = period.split('/').slice(0, 2).join('/');
+                    
+                }
+                
                 return (
-                    <View style = {{flex: 1, width: '30%', justifyContent: 'space-around', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(0,0,0,0.12)', borderRadius: 10, backgroundColor: 'white', marginVertical: 10,}} key = {index}>
-                        <Text style = {{fontSize: 12, color: '#184E77'}}>{prayer}</Text>
-                        <Text style = {{fontSize: 12, color: 'rgba(51,51,51,0.72)'}}>{atime}</Text>
-                        <Text style = {{fontSize: 12, color: 'rgba(51,51,51,0.72)'}}>{date}</Text>
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
+                        borderWidth: 1,
+                        borderColor: 'rgba(0,0,0,0.12)',
+                        borderRadius: 10,
+                        backgroundColor: 'white',
+                        marginVertical: 10
+                    }} key={index}>
+                        <Text style={{ fontSize: 12, color: '#184E77' }}>{prayer}</Text>
+                        <Text style={{ fontSize: 12, color: 'rgba(51,51,51,0.72)' }}>{`${atime}`}</Text>
+                        <Text style={{ fontSize: 12, color: 'rgba(51,51,51,0.72)' }}>{formattedDate}</Text>
                     </View>
-                )
+                );
             })
         )
         

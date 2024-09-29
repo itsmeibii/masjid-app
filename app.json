@@ -4,20 +4,20 @@
     "slug": "HalaqahApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/splashlogo.png",
+    "icon": "./assets/applogo.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splashlogo.png",
+      "image": "./assets/splashwithpadding.png",
       "resizeMode": "contain",
       "backgroundColor": "#fefefe"
     },
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.Ibrahim.masjid"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/splashlogo.png",
+        "foregroundImage": "./assets/applogo.png",
         "backgroundColor": "#ffffff"
       }
     },

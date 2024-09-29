@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, ScrollView } from 'react-native';
-
+import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator} from 'react-native';
 import { useModal } from '../context/AuthContext';
 import EventTable from '../components/EventTable';
 

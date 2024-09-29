@@ -6,23 +6,19 @@ import Event from './(app)/Event';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
-import HijriJS from './assets/Hijri';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Intro from './(app)/intro';
+
 import { ModalProvider, useModal } from './context/AuthContext';
-import * as SplashScreen from 'expo-splash-screen'
+
 import { PaperProvider } from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useFonts } from 'expo-font';
-import {ApplicationProvider} from '@ui-kitten/components';
-import * as eva from '@eva-design/eva';
-import {default as theme} from './assets/custom-theme.json'
+
 import ErrorBoundary from './components/ErrorBoundary';
+
 
 
 
@@ -102,9 +98,10 @@ export default function App() {
   if (!loaded) {
     return null;
   }
+  
   return (
     <ErrorBoundary>
-    <ApplicationProvider {...eva} theme = {{...eva.dark, ...theme}}>
+    
      <PaperProvider>
       <ModalProvider>
       <NavigationContainer>
@@ -112,7 +109,7 @@ export default function App() {
       </NavigationContainer>
       </ModalProvider>
       </PaperProvider>
-      </ApplicationProvider>
+      
       </ErrorBoundary>
 
     

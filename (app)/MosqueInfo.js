@@ -2,17 +2,18 @@ import { Image, StyleSheet, Text, View, Alert, Linking, Pressable, TouchableOpac
 import React from 'react'
 
 import Icon from 'react-native-vector-icons/FontAwesome6'
-import * as Clipboard from 'expo-clipboard'
-import Feather from 'react-native-vector-icons/Feather'
+
+import { AntDesign } from '@expo/vector-icons'
 import { IconButton } from 'react-native-paper'
+import { StatusBar } from 'expo-status-bar'
 
 const MosqueInfo = ({mosque, close}) => {
+    const [bar, setBar] = React.useState('light');
     const Break = () => {
         return <View  style = {{width: '90%', height: 1, backgroundColor: '#e1e1e1', borderRadius: 1, marginVertical: 5}}/>    
     }
-    async function copyToClipboard(text) {
-        await Clipboard.setStringAsync(text);
-        Alert.alert('Copied to clipboard');
+    async function openInPhone(text) {
+        Linking.openURL(`tel:${text}`).catch(err => Alert.alert('Error', "Can't open this number: " + err));
     }
     const openURL = async () => {
         const supported = await Linking.canOpenURL(mosque.website);
@@ -63,7 +64,9 @@ if (!mosque) {
     return null;   
 }
   return (
-    <View style = {{flex: 1}}>
+    <View style = {{flex: 1, justifyContent: 'space-between'}}>
+        <StatusBar style = {bar} />
+        <View>
         <View style = {styles.image} >
         <Image source = {{uri: mosque.imageURL}} style = {{height: '100%', width: '100%'}} />
         </View>
@@ -81,28 +84,9 @@ if (!mosque) {
                 <View style = {[styles.detail]} >
                 <Icon name = 'car-side' size = {20} color = 'black' style = {{marginLeft: 10,}} />
                 <Text style = {{fontSize: 17, fontWeight: '400', color: 'black', marginLeft: 15,}}>{mosque.distance}   ({mosque.duration})</Text>
-            </View>
-            <Break />
-            </>
-            ) : null}
-            
-            <View style = {[styles.detail]} >
-                <Icon name = 'phone' size = {20} color = 'black' style = {{marginLeft: 10,}} />
-                <Text style = {{fontSize: 17, fontWeight: '400', color: 'black', marginLeft: 15,}}>{mosque.phone}</Text>
-                <IconButton mode = 'outlined' icon = {() => <Feather name = 'copy' size = {20} color = 'black' />} onPress = {async () => await copyToClipboard(mosque.phone)} />
-                </View>
-            <Break />
-            <View style = {[styles.detail]} >
-                <Icon name = 'globe' size = {20} color = 'black' style = {{marginLeft: 10,}} />
-                <Pressable onPress = {async () => await openURL()}>
-                <Text style = {{fontSize: 17, fontWeight: '600', color: '#398cd4', marginLeft: 15, textDecorationLine: 'underline' }}>{mosque.website}</Text>
-                </Pressable>
-            </View>
-        </View>
-        <View style = {{width: '100%', alignItems: 'center', justifyContent: 'center', }} >
-        <IconButton icon = {() => (
-            <Image source = {require('../assets/gmaps.jpg')} style = {{height:45, width: 45,}}/>
-        )} size = {60} mode = 'outlined' containerColor='white'
+                <IconButton icon = {() => (
+            <Image source = {require('../assets/gmaps.jpg')} style = {{height:35, width: 35,}}/>
+        )} size = {35} mode = 'outlined' containerColor='white'
         onPress = {async() => {
             const url = `https://www.google.com/maps/search/?api=1&query=${mosque.Masjid.split(' ').join('+')}`
             const supported = await Linking.canOpenURL(url);
@@ -113,8 +97,45 @@ if (!mosque) {
             }
         }}
         />
+            </View>
+            <Break />
+            </>
+            ) : null}
+            
+            <View style = {[styles.detail]} >
+                <Icon name = 'phone' size = {20} color = 'black' style = {{marginLeft: 10,}} />
+                <Text style = {{fontSize: 17, fontWeight: '400', color: 'black', marginLeft: 15,}}>{mosque.phone}</Text>
+                <IconButton mode = 'outlined' icon = {() => <AntDesign name = 'arrowright' size = {25} color = 'white' />}  backgroundColor = 'black' onPress = {async () => await openInPhone(mosque.phone)} style = {{borderWidth: 0, marginLeft: 10,}} />
+                </View>
+            <Break />
+            <View style = {[styles.detail]} >
+                <Icon name = 'globe' size = {20} color = 'black' style = {{marginLeft: 10,}} />
+                <Pressable onPress = {async () => await openURL()}>
+                <Text style = {{fontSize: 17, fontWeight: '600', color: '#398cd4', marginLeft: 15, textDecorationLine: 'underline' }}>{mosque.website}</Text>
+                </Pressable>
+            </View>
         </View>
-        <TouchableOpacity style = {[styles.shadow,{height: 60, width: '90%', backgroundColor: '#38f25a', borderRadius: 20, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginTop: 20,}]} onPress = {() => close()}  >
+        <View style = {{width: '100%', alignItems: 'center', justifyContent: 'center', }} >
+        {!mosque?.distance && (
+            <IconButton icon = {() => (
+                <Image source = {require('../assets/gmaps.jpg')} style = {{height:45, width: 45,}}/>
+            )} size = {60} mode = 'outlined' containerColor='white'
+            onPress = {async() => {
+                const url = `https://www.google.com/maps/search/?api=1&query=${mosque.Masjid.split(' ').join('+')}`
+                const supported = await Linking.canOpenURL(url);
+                if (supported) {
+                  Linking.openURL(url);
+                } else {
+                  Alert.alert('Error', "Something went wrong while opening Google Maps");
+                }
+            }}
+            />
+        )}
+        </View>
+        </View>
+
+
+        <TouchableOpacity style = {[styles.shadow,{height: 60, width: '90%', backgroundColor: '#38f25a', borderRadius: 20, justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 30, }]} onPress = {() => {setBar('dark');close()}}  >
             <Text style = {{fontSize: 30, fontWeight: '900', color: 'white', textAlign: 'center', marginVertical: 10,}}>Done</Text>
         </TouchableOpacity>
     </View>

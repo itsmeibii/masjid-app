@@ -61,18 +61,28 @@ function isTomorrowMatchingDate(monthDayString) {
 }
 
 function getNextPrayer(masjid) {
-    const prayerOrder = ['Fajr', 'Zuhr', 'Asr', 'Maghrib', 'Isha'];
+    const prayerOrder = ['Fajr', ['Zuhr', 'Dhuhr', 'Thuhr'], 'Asr', 'Maghrib', 'Isha'];
     let next;
     for (let prayer of prayerOrder) {
       
-        if (prayer.substring(0,1) !== 'J') {
-        
+        if (!Array.isArray(prayer)) {
+      
         if (convertTo24HourTime(masjid.current[prayer]) > getCurrent24HourTime()) {
             
             
             next = {Prayer: prayer, Time: masjid.current[prayer]};
             break;
         }
+    } else {
+      //put the code here
+      for (let variant of prayer) {
+        // Check if the current masjid has this variant spelling of the prayer
+        if (masjid.current[variant] && convertTo24HourTime(masjid.current[variant]) > getCurrent24HourTime()) {
+            next = { Prayer: variant, Time: masjid.current[variant] };
+            break;
+        }
+    }
+    if (next) break;
     }
     }
     if (!next) {

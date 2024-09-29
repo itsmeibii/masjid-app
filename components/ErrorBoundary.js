@@ -12,8 +12,8 @@ export class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
         return (
-            <View>
-                <Text> Something went wrong </Text>
+            <View style = {{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <Text style = {{fontSize: 40, fontWeight: 'bold'}}> Something went wrong </Text>
             </View>
         )
     }

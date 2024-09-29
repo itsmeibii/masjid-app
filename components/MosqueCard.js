@@ -56,14 +56,17 @@ const MosqueCard = ({mosqueData, onPress}) => {
     }
   }
   
-  
+  {/* intensity: 32 */}
   
   
   const {nextPrayer} = useModal();
+  if (!mosqueData) {
+    return null;
+  }
   
   return (
-    <TouchableOpacity onPress = {() => onPress()} activeOpacity={0.5}>
-    <View style = {{width: 353, height: 240,borderRadius: 15, overflow: 'hidden', marginTop:25,
+    <TouchableOpacity onPress = {() => onPress()} activeOpacity={0.5} style = {{width: '100%', alignItems: 'center'}}>
+    <View style = {{width: '90%', height: 240,borderRadius: 15, overflow: 'hidden', marginTop:25,
       ...Platform.select({
         ios: {
           shadowColor: 'black',
@@ -78,14 +81,14 @@ const MosqueCard = ({mosqueData, onPress}) => {
       
       <ImageBackground source= {{uri: mosqueData.imageURL}} style = {{width: '100%', height: '100%', flex: 1, justifyContent: 'space-between', alignItems: 'center', }} >
       <View style = {{overflow: 'hidden', width: 83, height: 51, borderRadius: 10,alignSelf: 'flex-end', margin: 10, }}>
-        <BlurView intensity={32} style = {{width: '100%', flex: 1, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center', alignItems: 'center' }} >
+        <BlurView intensity={Platform.OS === 'ios' ? 32 : 100} style = {{width: '100%', flex: 1, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center', alignItems: 'center' }} >
           <Text style = {{fontFamily: 'RobotoFlexSB', fontSize: 13, color: 'white', marginBottom: 8}}>{nextPrayer.Time}</Text>
           <View style = {{alignItems: 'center'}}>
           <Text style = {{fontFamiyl: 'RobotoFlexMED', fontSize: 10, color: 'white', textAlign: 'center' }}>{timeUntil(nextPrayer.Time)}</Text>
           </View>
         </BlurView>
         </View>
-        <BlurView intensity = {32}  style = {{width: '100%', height: 68, blurRadius: 2, backgroundColor: 'rbga(255,255,255,0.12)', alignItems: 'center', flexDirection: 'row' ,}}>
+        <BlurView intensity = {Platform.OS === 'ios' ? 32 : 100}  style = {{width: '100%', height: 68, blurRadius: 2, backgroundColor: 'rbga(255,255,255,0.12)', alignItems: 'center', flexDirection: 'row' , justifyContent: 'space-between'}}>
         <View style = {{width: 280, height: 43, justifyContent: 'space-around', alignItems: 'flex-start', marginLeft: 12, }} >
           <Text style = {{fontFamily: 'RobotoFlexSB', fontSize: 17, color: 'white', marginBottom: 8}}>{mosqueData['Masjid']}</Text>
           <Text style = {{fontFamily: 'RobotoFlexSB', fontSize: 13, color: 'white'}}>Next Prayer: {nextPrayer.Prayer}</Text>
@@ -94,7 +97,7 @@ const MosqueCard = ({mosqueData, onPress}) => {
           
         </View>
         
-          <View style = {{  borderRadius: '50%', height: 44, width: 44, backgroundColor: '#D9ED92', alignItems: 'center', justifyContent: 'center' }}>
+          <View style = {{  borderRadius: 22, height: 44, width: 44, backgroundColor: '#D9ED92', alignItems: 'center', justifyContent: 'center', marginRight: 20, }}>
             <Arrow name = 'arrowright' size = {25} color = 'black' />
           </View>
            

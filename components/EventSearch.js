@@ -17,7 +17,7 @@ const EventSearch = ({setValue, value, past, setSearchQuery}) => {
     async function handleFilter(filter) {
         setValue(filter);
         setVisible(false);
-        await AsyncStorage.setItem('filter', filter);
+        
         
        
     }
@@ -57,7 +57,7 @@ const EventSearch = ({setValue, value, past, setSearchQuery}) => {
         <Animated.View style = {[{marginLeft: 12, marginRight: 8,}, {transform: [{rotate: rotateInterpolate}]}]}>
       <Feather name="search" size={24} color="rgba(0,0,0,0.6)" />
       </Animated.View>
-    <TextInput value = {search} onChangeText = {handleSearch} autoCapitalize='none' placeholder = 'Search Events'  style = {{height: 20, width: 244, fontFamily: 'RobotoFlexMED', fontSize: 17,}} onFocus = {rotateIcon} onBlur = {resetRotation}/>
+    <TextInput value = {search} onChangeText = {handleSearch} autoCapitalize='none' placeholder = 'Search Events'  style = {{height: 20, width: 244, fontFamily: 'RobotoFlexMED', fontSize: 17,}} onFocus = {rotateIcon} onBlur = {resetRotation} placeholderTextColor='rgba(37,37,37,0.9)'/>
     </View>
     
     
@@ -77,8 +77,8 @@ const EventSearch = ({setValue, value, past, setSearchQuery}) => {
     
     >
         
-        <Menu.Item onPress = {async () => {await handleFilter('Masjid')}} title = "Sort by Closest Masjid" />
-        <Menu.Item onPress = {async () => {await handleFilter('Time')}} title = "Sort by Time" />
+        <Menu.Item titleStyle = {{color: 'rgba(37,37,37,0.9)'}} onPress = {async () => {await handleFilter('Masjid')}} title = "Sort by Closest Masjid" />
+        <Menu.Item titleStyle = {{color: 'rgba(37,37,37,0.9)'}} onPress = {async () => {await handleFilter('Time')}} title = "Sort by Time" />
     </Menu>
     </View>
     

@@ -6,20 +6,13 @@ import { sorter } from '../components/sorter'; // Assuming you have a sorter fun
 import getNextPrayer from '../components/getNextPrayer';
 import util from 'util';
 import { getDistanceFromLatLonInMi } from '../components/sorter';
+
+
 SplashScreen.preventAutoHideAsync();
 // Create the Context
 const ModalContext = createContext();
 
-async function getMosques() {
-  try {
-    const data = await fetch('https://express-linux-bkrf4j3bwa-ue.a.run.app/prayertimes');
-    const snapshot = await data.json();
-    return snapshot.collectionData;
-  } catch (error) {
-    console.error('Error fetching mosques:', error);
-    throw error;
-  }
-}
+
 
 
 // Create a custom hook to use the ModalContext
@@ -30,6 +23,7 @@ export const useModal = () => {
 
 // Create a Provider component
 export const ModalProvider = ({ children }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [modal, setModal,] = useState(false);
   const [name, setName] = useState('');
   const [location, setLocation] = useState(undefined);
@@ -40,8 +34,21 @@ export const ModalProvider = ({ children }) => {
   const ref = useRef(false);
 
 
-
+  async function getMosques() {
+    try {
+      
+      
+      const data = await fetch('https://express-linux-bkrf4j3bwa-ue.a.run.app/prayertimes');
+      const snapshot = await data.json();
+      
+      return snapshot.collectionData;
+    } catch (error) {
+      console.error('Error fetching mosques:', error);
+      throw error;
+    }
+  }
   async function getTimes(loc,mdata) {
+    
     let copy = mdata;
     if (loc) {
       const {latitude, longitude} = loc;
@@ -57,6 +64,7 @@ export const ModalProvider = ({ children }) => {
       }
       return copy;
     }
+    return null;
   }
 
 
@@ -107,6 +115,7 @@ export const ModalProvider = ({ children }) => {
     
 
   }
+ 
 
   const checkPermissions = async () => {
     const { status } = await Location.getForegroundPermissionsAsync();
@@ -140,8 +149,13 @@ export const ModalProvider = ({ children }) => {
   };
   let times = 0;
   async function getAllCollections() {
+    
+    //
     const response = await fetch ('https://express-linux-bkrf4j3bwa-ue.a.run.app/allevents');
+    
     const data = await response.json();
+    console.log('Data:', data);
+    
     for (let key in data) {
       data[key].shift();
     }
@@ -182,7 +196,19 @@ useEffect(() => {
     
   })
   
-}, []);
+}, [currentDate]);
+useEffect(() => {
+  const checkDateChange = () => {
+    const newDate = new Date();
+    if (newDate.getDate() !== currentDate.getDate()) {
+      setCurrentDate(newDate); // Update the date to trigger the main useEffect
+    }
+  };
+
+  const intervalId = setInterval(checkDateChange, 60000); // Check every minute
+
+  return () => clearInterval(intervalId); // Clean up the interval on unmount
+}, [currentDate]);
 
   return (
     <ModalContext.Provider value={{events, getAllCollections, modal, setModal, name, setName, location, mosqueData, isAppReady, startApp, nextPrayer, setNextPrayer, getNextPrayer }}>

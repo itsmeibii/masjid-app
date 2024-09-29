@@ -5,11 +5,13 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import Exclamation from 'react-native-vector-icons/EvilIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Entypo, Feather, AntDesign } from '@expo/vector-icons';
+import AndroidDialog from 'react-native-dialog'
 
 
 const EventElement = ({ data, isfirst }) => {
   let eventName, location, time, date, extraInfo;
   const screenWidth = Dimensions.get('window').width;
+  const [aDialog, setADialog] = useState({visible: false, email: ''});
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [reportVisible, setReportVisible] = useState(false);
@@ -255,12 +257,20 @@ const EventElement = ({ data, isfirst }) => {
             </Dialog.Actions>
             </>
           )} */}
-          <Dialog.Title >
-              <View style = {{alignItems: 'center', flexDirection: 'column'}}>
-              <Text style = {{fontSize: 17, fontWeight: 700, color: '#e30b33'}}>Report Event:</Text>
-              <Text style = {{fontSize: 19, }}> {capitalize(eventName)}</Text>
-              </View>
-            </Dialog.Title>
+          {Platform.OS === 'ios' ? (
+            <Dialog.Title>
+            <View style = {{alignItems: 'center', flexDirection: 'column',  }}>
+            <Text style = {{fontSize: 17, fontWeight: 700, color: '#e30b33', }}>Report Event:</Text>
+            
+            <Text style = {{fontSize: 19, textAlign: 'center',    }}> {capitalize(eventName)}</Text>
+            
+            </View>
+          </Dialog.Title>
+          ): (
+            <Dialog.Title style = {{fontSize: 23, color: 'rgb(51,51,51)', textAlign: 'center', fontWeight: 700}}>Report Event: {capitalize(eventName).trim()}</Dialog.Title>
+          )}
+          
+            
             <Dialog.Content>
           {loading ? ( 
             
@@ -277,7 +287,7 @@ const EventElement = ({ data, isfirst }) => {
             search = {false}
             searchicon = {() => <Exclamation name = 'exclamation' size = {20} color = 'black' />}
             boxStyles = {{width: '90%', height: 40, borderRadius: 100, backgroundColor: 'rgba(224,224,224,0.32)', borderWidth: 0,}}
-            inputStyles = {{color: 'rgba(0,0,0,0.48)'}}
+            inputStyles = {{color: 'rgba(37,37,37, 0.9)'}}
             />
             </View>
             
@@ -288,7 +298,7 @@ const EventElement = ({ data, isfirst }) => {
           )}
           </Dialog.Content>
           <Dialog.Actions>
-              <View style = {{flexDirection: 'row', justifyContent: 'center', width: '100%', height: 44, marginTop: 5,}}>
+              <View style = {{flexDirection: 'row', justifyContent: 'center', width: '100%', height: 44, marginTop: 5, }}>
                 <Button  style = {{width: 156, height: '100%', borderRadius: 100, marginRight: 9}} buttonColor = '#0D6CFC' mode = 'contained' onPress={() => setReportVisible(false)}>Cancel</Button>
                 <Button style = {{width: 156, height: '100%', borderRadius: 100,}} buttonColor = '#FF5B47' mode = 'contained' 
                 icon = {() => <AntDesign name = 'exclamationcircleo' size = {23} color = 'white'/>} onPress = {async () =>  {
@@ -320,6 +330,36 @@ const EventElement = ({ data, isfirst }) => {
       {isfirst && (
         <View style = {{width: 353, height: 1, borderTopWidth: 1, borderTopColor:'rgba(0,0,0,0.2)', marginVertical: 15,}} />
       )}
+          {Platform.OS !== 'ios' ? (
+                  <View>
+                  <AndroidDialog.Container visible={aDialog.visible}>
+                    <AndroidDialog.Title>Enter your email to be sent with the report</AndroidDialog.Title>
+                   
+                    <AndroidDialog.Input
+                      onChangeText={(text) => 
+                        setADialog((prev) => ({
+                          ...prev,
+                          email: text,
+                        })) // Capture the text into a simple variable
+                      }
+                      value = {aDialog.name}
+                    />
+                    <AndroidDialog.Button label="Cancel"  onPress = {() => setADialog((prev) => ({
+                      ...prev,
+                      visible: false,
+                    }))}/>
+                    <AndroidDialog.Button label="Set" onPress = { async () => {
+                    if (!aDialog.email) {
+                      Alert.alert('Error', 'Please enter an email to submit the report');
+                      return;
+                    }
+                    await AsyncStorage.setItem('email', aDialog.email);
+                    await handleReport(aDialog.email);
+                  
+                  }} />
+                  </AndroidDialog.Container>
+                </View>
+                 ) : null}
           <View style = {{width: 353,  height: 120, overflow: 'auto',    flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', borderRadius: 12, marginVertical: 4, 
             ...Platform.select({
               ios: {
