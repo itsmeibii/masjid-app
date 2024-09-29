@@ -12,15 +12,30 @@
       "backgroundColor": "#fefefe"
     },
     "ios": {
+      "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
       "bundleIdentifier": "com.Ibrahim.masjid"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
+      "package": "com.Ibrahim.masjid",
       "adaptiveIcon": {
         "foregroundImage": "./assets/applogo.png",
         "backgroundColor": "#ffffff"
       }
     },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/app-check",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
     },

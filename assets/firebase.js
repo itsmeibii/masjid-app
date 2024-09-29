@@ -24,3 +24,25 @@
 //   provider: new ReCaptchaV3Provider('6LeWKlIqAAAAADyIIOJaCMiR8JNB1pAC-onykeGq'),  // Replace with your reCAPTCHA site key
 //   isTokenAutoRefreshEnabled: true  // Optional, automatically refresh App Check token
 // });
+import { firebase } from '@react-native-firebase/app';
+import appCheck from '@react-native-firebase/app-check';
+
+// Create a new App Check provider
+const rnfbProvider = firebase.appCheck().newReactNativeFirebaseAppCheckProvider();
+
+// Configure the provider specifically for iOS
+rnfbProvider.configure({
+  apple: {
+    provider: __DEV__ ? 'debug' : 'appAttestWithDeviceCheckFallback', // Use App Attest with DeviceCheck fallback for iOS
+    debugToken: '0D9E2AAB-2261-44CF-B686-B89DE9461708', // Optional debug token for testing in development
+  },
+});
+
+// Initialize App Check for iOS only
+firebase.appCheck().initializeAppCheck({
+  provider: rnfbProvider,
+  isTokenAutoRefreshEnabled: true, // Automatically refresh App Check tokens
+});
+
+export default firebase;
+

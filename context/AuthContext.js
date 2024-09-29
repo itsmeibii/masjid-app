@@ -6,6 +6,8 @@ import { sorter } from '../components/sorter'; // Assuming you have a sorter fun
 import getNextPrayer from '../components/getNextPrayer';
 import util from 'util';
 import { getDistanceFromLatLonInMi } from '../components/sorter';
+import '../assets/firebase'
+import { firebase } from '@react-native-firebase/app';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -33,7 +35,17 @@ export const ModalProvider = ({ children }) => {
   const [events,setEvents]  = useState(null);
   const ref = useRef(false);
 
-
+  async function testFB() {
+    try {
+      const { token } = await firebase.appCheck().getToken(true);
+    
+      if (token.length > 0) {
+        console.log('AppCheck verification passed');
+      }
+    } catch (error) {
+      console.log('AppCheck verification failed');
+    }
+  }
   async function getMosques() {
     try {
       
@@ -152,10 +164,10 @@ export const ModalProvider = ({ children }) => {
     
     //
     const response = await fetch ('https://express-linux-bkrf4j3bwa-ue.a.run.app/allevents');
-    console.log();
+    
     
     const data = await response.json();
-    console.log('Data:', data);
+    
     
     for (let key in data) {
       data[key].shift();
@@ -190,12 +202,14 @@ export const ModalProvider = ({ children }) => {
   
 }, [mosqueData]);
 useEffect(() => {
+  
   startApp().then(() => {
     SplashScreen.hideAsync();
     
     
     
   })
+  testFB();
   
 }, [currentDate]);
 useEffect(() => {

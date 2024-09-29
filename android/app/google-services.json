@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "970266916925",
+    "firebase_url": "https://masjid-app-b68d9-default-rtdb.firebaseio.com",
+    "project_id": "masjid-app-b68d9",
+    "storage_bucket": "masjid-app-b68d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970266916925:android:b12eedb5e06d3d1f731254",
+        "android_client_info": {
+          "package_name": "com.Ibrahim.masjid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970266916925-t9lblts00hf85eesj7tigfmu4g0q5top.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_L_-IUys1mImgMKcxj-9HqNeeV_VJjUQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970266916925-t9lblts00hf85eesj7tigfmu4g0q5top.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "970266916925-3vofcsq72a640i4dpjm8qfd2onh672n5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.Ibrahim.masjid"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
