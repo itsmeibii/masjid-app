@@ -214,7 +214,7 @@ const Prayer = ({data, onRowPress, index}) => {
         
         onRowPress(index)
         }} style = {{width: '100%'}}>
-    <View style = {{width: '90%', height: 160, borderRadius: 12, backgroundColor: 'white', marginVertical: 6, flexDirection: 'row', alignItems: 'center', 
+    <View style = {{width: '90%', height: 160, borderRadius: 12,  marginVertical: 6, flexDirection: 'row', alignItems: 'center', backgroundColor: 'white' ,
         ...Platform.select({
             ios: {
                 shadowColor: 'rgba(0,0,0,0.25)',
@@ -232,7 +232,7 @@ const Prayer = ({data, onRowPress, index}) => {
         <Image source = {{uri: image}} style = {{flex: 5, width: 96, borderRadius: 8}} />
         <View style = {{width: 96,  justifyContent: 'center', }}>
         <Text style = {{fontWeight: 600, fontSize: 12, textAlign: 'center', marginVertical: 2, }}>{name}</Text>
-        <Text style = {{fontWeight: 600, fontSize: 12, textAlign: 'center', marginVertical: 2, }}>({data.duration})</Text>
+        {data?.duration && <Text style = {{fontWeight: 600, fontSize: 12, textAlign: 'center', marginVertical: 2, }}>({data.duration})</Text>}
         </View>
         {data.upcomingChanges && (
         <TouchableOpacity style = {{ height: 20,}} onPress = {() => setFuture({...future, show: !future.show})}>

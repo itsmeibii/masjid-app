@@ -25,7 +25,7 @@ import AndroidDialog from 'react-native-dialog';
 export default function Home()
 {   
    const [feedback, setFeedback] = useState('');
-    const {events, name, setName, location, modal, setModal, mosqueData, isAppReady, startApp, nextPrayer, setNextPrayer, getAllCollections} = useModal()
+    const {events,token,  name, setName, location, modal, setModal, mosqueData, isAppReady, startApp, nextPrayer, setNextPrayer, getAllCollections} = useModal()
     const [email, setEmail] = useState('')
     const [rating, setRating] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -67,6 +67,7 @@ export default function Home()
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-firebase-appcheck': token,
         },
         body: JSON.stringify({
           feedback: feedbackobj,

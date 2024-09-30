@@ -6,9 +6,11 @@ import Exclamation from 'react-native-vector-icons/EvilIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Entypo, Feather, AntDesign } from '@expo/vector-icons';
 import AndroidDialog from 'react-native-dialog'
+import { useModal } from '../context/AuthContext';
 
 
 const EventElement = ({ data, isfirst }) => {
+  const {token} = useModal();
   let eventName, location, time, date, extraInfo;
   const screenWidth = Dimensions.get('window').width;
   const [aDialog, setADialog] = useState({visible: false, email: ''});
@@ -102,6 +104,7 @@ const EventElement = ({ data, isfirst }) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'x-firebase-appcheck': token,
       },
       body: JSON.stringify({
         masjid: data.mosque,

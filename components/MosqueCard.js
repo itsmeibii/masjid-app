@@ -66,7 +66,7 @@ const MosqueCard = ({mosqueData, onPress}) => {
   
   return (
     <TouchableOpacity onPress = {() => onPress()} activeOpacity={0.5} style = {{width: '100%', alignItems: 'center'}}>
-    <View style = {{width: '90%', height: 240,borderRadius: 15, overflow: 'hidden', marginTop:25,
+    <View style = {{width: '90%', height: 240,borderRadius: 15, overflow: 'hidden', marginTop:25, backgroundColor: 'white',
       ...Platform.select({
         ios: {
           shadowColor: 'black',

@@ -25,6 +25,7 @@ export const useModal = () => {
 
 // Create a Provider component
 export const ModalProvider = ({ children }) => {
+  const [token, setAppToken] = useState('');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [modal, setModal,] = useState(false);
   const [name, setName] = useState('');
@@ -34,23 +35,38 @@ export const ModalProvider = ({ children }) => {
   const [nextPrayer, setNextPrayer] = useState(null);
   const [events,setEvents]  = useState(null);
   const ref = useRef(false);
-
-  async function testFB() {
-    try {
+  async function getToken() {
+    
       const { token } = await firebase.appCheck().getToken(true);
     
       if (token.length > 0) {
-        console.log('AppCheck verification passed');
+        return token;
       }
-    } catch (error) {
-      console.log('AppCheck verification failed');
-    }
+      throw new Error('AppCheck verification failed');
+    
+      
   }
-  async function getMosques() {
+  // async function testFB() {
+  //   try {
+  //     const { token } = await firebase.appCheck().getToken(true);
+    
+  //     if (token.length > 0) {
+  //       console.log('AppCheck verification passed');
+  //       console.log(JSON.stringify(token));
+  //     }
+  //   } catch (error) {
+  //     console.log('AppCheck verification failed');
+  //   }
+  // }
+  async function getMosques(token) {
     try {
       
       
-      const data = await fetch('https://express-linux-bkrf4j3bwa-ue.a.run.app/prayertimes');
+      const data = await fetch('https://express-linux-970266916925.us-east1.run.app/prayertimes', {
+        headers: {
+          'x-firebase-appcheck': token
+        }
+      });
       const snapshot = await data.json();
       
       return snapshot.collectionData;
@@ -59,16 +75,23 @@ export const ModalProvider = ({ children }) => {
       throw error;
     }
   }
-  async function getTimes(loc,mdata) {
-    
+  async function getTimes(loc,mdata,token) {
+    console.log('GET TIMES RAN')
     let copy = mdata;
     if (loc) {
+      console.log('WERE IN')
       const {latitude, longitude} = loc;
       const params = new URLSearchParams({
         lat: latitude,
         lng: longitude
       })
-      const data = await fetch (`https://express-linux-bkrf4j3bwa-ue.a.run.app/drivetime?${params.toString()}`);
+      
+      const data = await fetch (`https://express-linux-970266916925.us-east1.run.app/drivetime?${params.toString()}`, {
+        headers: {
+          'x-firebase-appcheck': token
+        }
+      });
+      console.log(`DRIVTIME DATA ${!!data}`)
       const response = await data.json();
       
       for (let mosque in response) {
@@ -105,10 +128,11 @@ export const ModalProvider = ({ children }) => {
     }
   }
 
-  async function getSortedMosques(loc) {
+  async function getSortedMosques(loc,token) {
     try {
-      const mosques = await getMosques();
-      const copy = await getTimes(loc, mosques);
+      const mosques = await getMosques(token);
+      console.log('MAPS RAN')
+      const copy = await getTimes(loc, mosques,token);
       if (copy) {
         
         
@@ -149,9 +173,13 @@ export const ModalProvider = ({ children }) => {
 
   const startApp = async () => {
     try {
+      let token = await getToken();
+      setAppToken(token);
       await checkPermissions();
       await initialize();
-      await getAllCollections();
+      await getAllCollections(token);
+      let obj = await getSortedMosques(location,token)
+      setMosqueData(obj);
       // const sortedMosques = await getSortedMosques(location);
       // setMosqueData(sortedMosques);
       setIsAppReady(true); // Mark the app as ready
@@ -160,11 +188,18 @@ export const ModalProvider = ({ children }) => {
     }
   };
   let times = 0;
-  async function getAllCollections() {
+  async function getAllCollections(token) {
     
     //
-    const response = await fetch ('https://express-linux-bkrf4j3bwa-ue.a.run.app/allevents');
-    
+    try {
+    const response = await fetch ('https://express-linux-970266916925.us-east1.run.app/allevents', {
+      headers: {
+        'x-firebase-appcheck': `${token}`
+      }
+    });
+    if (response.status == 503) {
+      throw new Error('down');
+    }
     
     const data = await response.json();
     
@@ -174,16 +209,13 @@ export const ModalProvider = ({ children }) => {
     }
     
     setEvents(data);
+  } catch (e) {
+    throw new Error(e);
+  }
 }
   useEffect(() => {
     
-    getSortedMosques(location).then(async (sortedMosques) => {
-      const obj = sortedMosques
-      // const copy = await getAllCollections(obj);
-      
-      setMosqueData(obj);
-      
-    })
+    
   }, [location]);
 
   // useEffect to update nextPrayer once mosqueData is set
@@ -205,11 +237,12 @@ useEffect(() => {
   
   startApp().then(() => {
     SplashScreen.hideAsync();
+    console.log('RAN')
     
     
     
   })
-  testFB();
+  
   
 }, [currentDate]);
 useEffect(() => {
@@ -226,7 +259,7 @@ useEffect(() => {
 }, [currentDate]);
 
   return (
-    <ModalContext.Provider value={{events, getAllCollections, modal, setModal, name, setName, location, mosqueData, isAppReady, startApp, nextPrayer, setNextPrayer, getNextPrayer }}>
+    <ModalContext.Provider value={{token, events, getAllCollections, modal, setModal, name, setName, location, mosqueData, isAppReady, startApp, nextPrayer, setNextPrayer, getNextPrayer }}>
       {children}
     </ModalContext.Provider>
   );
