@@ -1,6 +1,6 @@
 import { Platform, StyleSheet, Text, View, Image , TouchableOpacity, AppState} from 'react-native'
 import React from 'react'
-import {Button} from 'react-native-paper'
+
 
 
 const Prayer = ({data, onRowPress, index}) => {
@@ -8,8 +8,8 @@ const Prayer = ({data, onRowPress, index}) => {
     
     const [appState, setAppState] = React.useState(AppState.currentState);
     const [nextPrayer, setNextPrayer] = React.useState(null);
-    const {Masjid: name, imageURL: image, current} = data;
-    const {Fajr, Zuhr, Asr, Maghrib, Isha} = current;
+    const {Masjid: name, imageURL: image, current, lastUpdated} = data;
+    
     const prayers = ['Fajr', 'Zuhr', 'Dhuhr', 'Thuhr', 'Asr', 'Maghrib', 'Isha'];
     
     React.useEffect(() => {
@@ -105,6 +105,7 @@ const Prayer = ({data, onRowPress, index}) => {
       
         // Ensure hours and minutes are in two-digit format
         hours = hours < 10 ? `0${hours}` : hours;
+        
         minutes = minutes.padStart(2, '0');
       
         return `${hours}:${minutes}`;
@@ -179,15 +180,15 @@ const Prayer = ({data, onRowPress, index}) => {
           
           return setNextPrayer(next);
       }
-      function remspace(timeString) {
-        // Use regex to check if there is a space between HH:MM and AM/PM
-        if (/\d{1,2}:\d{2}\s[APMapm]{2}/.test(timeString)) {
-          // If space is found, remove it using replace
-          return timeString.replace(' ', '');
-        }
-        // Return the original string if no space is found
-        return timeString;
-      }
+    //   function remspace(timeString) {
+    //     // Use regex to check if there is a space between HH:MM and AM/PM
+    //     if (/\d{1,2}:\d{2}\s[APMapm]{2}/.test(timeString)) {
+    //       // If space is found, remove it using replace
+    //       return timeString.replace(' ', '');
+    //     }
+    //     // Return the original string if no space is found
+    //     return timeString;
+    //   }
       function format(timeString) {
         if (!timeString) {
             return null;
@@ -227,8 +228,9 @@ const Prayer = ({data, onRowPress, index}) => {
             },
         })
     }}>
-
+        
       <View style = {{width: 112, height: 136, marginLeft: 16, justifyContent: 'space-around', borderRightWidth: 1, borderRightColor: 'rgba(0,0,0,0.12)' }}>
+      <Text style = {{fontSize: 7, marginBottom: 5,}}>Last Updated: {lastUpdated}</Text>
         <Image source = {{uri: image}} style = {{flex: 5, width: 96, borderRadius: 8}} />
         <View style = {{width: 96,  justifyContent: 'center', }}>
         <Text style = {{fontWeight: 600, fontSize: 12, textAlign: 'center', marginVertical: 2, }}>{name}</Text>
@@ -345,4 +347,3 @@ const Prayer = ({data, onRowPress, index}) => {
 
 export default Prayer
 
-const styles = StyleSheet.create({})

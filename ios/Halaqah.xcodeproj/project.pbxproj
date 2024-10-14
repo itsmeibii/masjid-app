@@ -3,20 +3,28 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		19D30B56F8364078B01BDFCA /* Beiruti.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B988520C7E08423ABCB2CD30 /* Beiruti.ttf */; };
+		2FF341F7D98342489F7B222C /* RobotoFlex-SB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDB4EC1AC6014B51B10AD4A8 /* RobotoFlex-SB.ttf */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
+		611840EC11754323A30A837D /* RobotoFlex-BOLD.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 278B6F345C4D466ABB11146B /* RobotoFlex-BOLD.ttf */; };
+		6233E9F38A2E4331ACCD6DC7 /* RobotoFlex.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16B8406DDA144014AF402002 /* RobotoFlex.ttf */; };
+		6472792C6E39490C9B8D670F /* RobotoFlex-EL.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ACD738F8536F443CBE0A07E3 /* RobotoFlex-EL.ttf */; };
+		7FB7772057854D1097121909 /* RobotoFlex-REG.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41FF1F24CA384008995A1302 /* RobotoFlex-REG.ttf */; };
 		817C255CCE319348C763B701 /* Pods_Halaqah.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3579F1EA2707E1F9BE08F271 /* Pods_Halaqah.framework */; };
 		9EF7C214EDAE4B9293767FAE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 606DE461D54E4814B3934F1D /* GoogleService-Info.plist */; };
+		A5A34484C87E4E638BD92124 /* RobotoFlex-MED.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18E97EAF927C4BFFB416E1C0 /* RobotoFlex-MED.ttf */; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		C87E9087EE6944288F364B5C /* noop-file.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959968A204A044C48C80446B /* noop-file.swift */; };
 		F75B9F4A1DE9C3A744D7F487 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D11507E6D709CD07EA1A42C7 /* PrivacyInfo.xcprivacy */; };
+		FCB34392015D4AF088041B66 /* Roboto Mono.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B7FF023D47842359BBC9B27 /* Roboto Mono.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,15 +35,24 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Halaqah/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Halaqah/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Halaqah/main.m; sourceTree = "<group>"; };
+		16B8406DDA144014AF402002 /* RobotoFlex.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = RobotoFlex.ttf; path = ../assets/fonts/RobotoFlex.ttf; sourceTree = "<group>"; };
+		18E97EAF927C4BFFB416E1C0 /* RobotoFlex-MED.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoFlex-MED.ttf"; path = "../assets/fonts/RobotoFlex-MED.ttf"; sourceTree = "<group>"; };
+		278B6F345C4D466ABB11146B /* RobotoFlex-BOLD.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoFlex-BOLD.ttf"; path = "../assets/fonts/RobotoFlex-BOLD.ttf"; sourceTree = "<group>"; };
 		3579F1EA2707E1F9BE08F271 /* Pods_Halaqah.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Halaqah.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		41FF1F24CA384008995A1302 /* RobotoFlex-REG.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoFlex-REG.ttf"; path = "../assets/fonts/RobotoFlex-REG.ttf"; sourceTree = "<group>"; };
 		606DE461D54E4814B3934F1D /* GoogleService-Info.plist */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Halaqah/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-Halaqah.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Halaqah.debug.xcconfig"; path = "Target Support Files/Pods-Halaqah/Pods-Halaqah.debug.xcconfig"; sourceTree = "<group>"; };
+		7414E88C2CB342670057BFE6 /* HalaqahRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HalaqahRelease.entitlements; path = Halaqah/HalaqahRelease.entitlements; sourceTree = "<group>"; };
 		7A4D352CD337FB3A3BF06240 /* Pods-Halaqah.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Halaqah.release.xcconfig"; path = "Target Support Files/Pods-Halaqah/Pods-Halaqah.release.xcconfig"; sourceTree = "<group>"; };
+		7B7FF023D47842359BBC9B27 /* Roboto Mono.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto Mono.ttf"; path = "../assets/fonts/Roboto Mono.ttf"; sourceTree = "<group>"; };
 		959968A204A044C48C80446B /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Halaqah/noop-file.swift"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Halaqah/SplashScreen.storyboard; sourceTree = "<group>"; };
+		ACD738F8536F443CBE0A07E3 /* RobotoFlex-EL.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoFlex-EL.ttf"; path = "../assets/fonts/RobotoFlex-EL.ttf"; sourceTree = "<group>"; };
+		B988520C7E08423ABCB2CD30 /* Beiruti.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Beiruti.ttf; path = ../assets/fonts/Beiruti.ttf; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		D11507E6D709CD07EA1A42C7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Halaqah/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		D11507E6D709CD07EA1A42C7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Halaqah/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		EDB4EC1AC6014B51B10AD4A8 /* RobotoFlex-SB.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoFlex-SB.ttf"; path = "../assets/fonts/RobotoFlex-SB.ttf"; sourceTree = "<group>"; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Halaqah/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -54,6 +71,7 @@
 		13B07FAE1A68108700A75B9A /* Halaqah */ = {
 			isa = PBXGroup;
 			children = (
+				7414E88C2CB342670057BFE6 /* HalaqahRelease.entitlements */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -94,6 +112,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				D65327D7A22EEC0BE12398D9 /* Pods */,
 				D7E4C46ADA2E9064B798F356 /* ExpoModulesProviders */,
+				B02EF00FBF8849698570FA92 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -114,6 +133,21 @@
 				FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */,
 			);
 			name = Halaqah;
+			sourceTree = "<group>";
+		};
+		B02EF00FBF8849698570FA92 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B988520C7E08423ABCB2CD30 /* Beiruti.ttf */,
+				7B7FF023D47842359BBC9B27 /* Roboto Mono.ttf */,
+				278B6F345C4D466ABB11146B /* RobotoFlex-BOLD.ttf */,
+				ACD738F8536F443CBE0A07E3 /* RobotoFlex-EL.ttf */,
+				18E97EAF927C4BFFB416E1C0 /* RobotoFlex-MED.ttf */,
+				41FF1F24CA384008995A1302 /* RobotoFlex-REG.ttf */,
+				EDB4EC1AC6014B51B10AD4A8 /* RobotoFlex-SB.ttf */,
+				16B8406DDA144014AF402002 /* RobotoFlex.ttf */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
@@ -209,6 +243,14 @@
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
 				9EF7C214EDAE4B9293767FAE /* GoogleService-Info.plist in Resources */,
 				F75B9F4A1DE9C3A744D7F487 /* PrivacyInfo.xcprivacy in Resources */,
+				19D30B56F8364078B01BDFCA /* Beiruti.ttf in Resources */,
+				FCB34392015D4AF088041B66 /* Roboto Mono.ttf in Resources */,
+				611840EC11754323A30A837D /* RobotoFlex-BOLD.ttf in Resources */,
+				6472792C6E39490C9B8D670F /* RobotoFlex-EL.ttf in Resources */,
+				A5A34484C87E4E638BD92124 /* RobotoFlex-MED.ttf in Resources */,
+				7FB7772057854D1097121909 /* RobotoFlex-REG.ttf in Resources */,
+				2FF341F7D98342489F7B222C /* RobotoFlex-SB.ttf in Resources */,
+				6233E9F38A2E4331ACCD6DC7 /* RobotoFlex.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +310,7 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/GoogleUtilities/GoogleUtilities_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/PromisesObjC/FBLPromises_Privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNDeviceInfo/RNDeviceInfoPrivacyInfo.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -302,6 +345,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleUtilities_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FBLPromises_Privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNDeviceInfoPrivacyInfo.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -412,7 +456,10 @@
 				);
 				INFOPLIST_FILE = Halaqah/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -422,6 +469,10 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Ibrahim.masjid;
 				PRODUCT_NAME = Halaqah;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Halaqah/Halaqah-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -436,11 +487,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Halaqah/Halaqah.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Halaqah/HalaqahRelease.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = Halaqah/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -450,6 +504,10 @@
 				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Ibrahim.masjid;
 				PRODUCT_NAME = Halaqah;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "Halaqah/Halaqah-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -520,14 +578,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD = "";
 				LDPLUSPLUS = "";
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -590,13 +648,13 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD = "";
 				LDPLUSPLUS = "";
-				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					/usr/lib/swift,
+					"$(inherited)",
+				);
 				LIBRARY_SEARCH_PATHS = "$(SDKROOT)/usr/lib/swift\"$(inherited)\"";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

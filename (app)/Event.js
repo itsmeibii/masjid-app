@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator} from 'react-native';
 import { useModal } from '../context/AuthContext';
 import EventTable from '../components/EventTable';
@@ -27,6 +27,9 @@ export default function Event(props) {
     if (!isAppReady) {
         return <ActivityIndicator size="large" color="green" />;
     } else if (!mosqueData) {
+        return <ActivityIndicator size="large" color="green" />;
+      }
+      if (!events) {
         return <ActivityIndicator size="large" color="green" />;
       }
 

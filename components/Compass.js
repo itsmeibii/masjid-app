@@ -5,7 +5,7 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from '
 import { MaterialIcons } from '@expo/vector-icons';
 
 
-import { useModal } from '../context/AuthContext';
+
 
 const { width } = Dimensions.get('window');
 const compassSize = width * 0.8;  // Size of the compass (80% of screen width)
@@ -130,7 +130,7 @@ const getCurrentLocation = async () => {
 
   let location = await Location.getCurrentPositionAsync({});
   const { latitude, longitude } = location.coords;
-  console.log(`Current location: ${latitude}, ${longitude}`);
+  
   return { latitude, longitude };
 };
 

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, View, Linking, Image, ActivityIndicator, Alert, Platform, Dimensions, Touchable } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Alert, Platform, Dimensions } from 'react-native';
+import React, {useState } from 'react';
 import { Portal, Dialog, Button } from 'react-native-paper';
 import { SelectList } from 'react-native-dropdown-select-list';
 import Exclamation from 'react-native-vector-icons/EvilIcons';
@@ -10,9 +10,9 @@ import { useModal } from '../context/AuthContext';
 
 
 const EventElement = ({ data, isfirst }) => {
-  const {token} = useModal();
+  
   let eventName, location, time, date, extraInfo;
-  const screenWidth = Dimensions.get('window').width;
+  
   const [aDialog, setADialog] = useState({visible: false, email: ''});
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -47,15 +47,60 @@ const EventElement = ({ data, isfirst }) => {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize first letter of each word
         .join(' '); // Join the words back into a string
 }
+
   if (data?.id !== '0' && data?.data?.eventName) {
     ({ location, time, date, eventName, extraInfo } = data.data ?? {});
+    
+    
   }
   
 
+  
+  
+
+  // function formatDate(dateString) {
+    
+  //   const date = new Date(dateString.trim());
+  //   if (!date) {
+  //     return 'No Date Specified';
+  //   }
+
+  //   function getDaySuffix(day) {
+  //     if (day > 3 && day < 21) return 'th'; // Covers 11th-19th
+  //     switch (day % 10) {
+  //       case 1:
+  //         return 'st';
+  //       case 2:
+  //         return 'nd';
+  //       case 3:
+  //         return 'rd';
+  //       default:
+  //         return 'th';
+  //     }
+  //   }
+
+  //   const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  //   const dayOfWeek = daysOfWeek[date.getDay()];
+
+  //   const dayOfMonth = date.getDate();
+  //   const daySuffix = getDaySuffix(dayOfMonth);
+
+  //   const months = [
+  //     'January', 'February', 'March', 'April', 'May', 'June',
+  //     'July', 'August', 'September', 'October', 'November', 'December'
+  //   ];
+  //   const monthName = months[date.getMonth()];
+
+  //   const year = date.getFullYear();
+  //   if (!dayOfWeek || !dayOfMonth || !monthName || !year) {
+  //     return dateString;
+  //   }
+  //   return `${dayOfWeek} ${dayOfMonth}${daySuffix} ${monthName}, ${year}`;
+  // }
   function formatDate(dateString) {
     
-    const date = new Date(dateString.trim());
-    if (!date) {
+    const date = new Date(dateString.trim() + "T00:00:00Z"); // Parse as UTC
+    if (isNaN(date)) {
       return 'No Date Specified';
     }
 
@@ -74,23 +119,24 @@ const EventElement = ({ data, isfirst }) => {
     }
 
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const dayOfWeek = daysOfWeek[date.getDay()];
+    const dayOfWeek = daysOfWeek[date.getUTCDay()];
 
-    const dayOfMonth = date.getDate();
+    const dayOfMonth = date.getUTCDate();
     const daySuffix = getDaySuffix(dayOfMonth);
 
     const months = [
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
-    const monthName = months[date.getMonth()];
+    const monthName = months[date.getUTCMonth()];
 
-    const year = date.getFullYear();
+    const year = date.getUTCFullYear();
     if (!dayOfWeek || !dayOfMonth || !monthName || !year) {
       return dateString;
     }
     return `${dayOfWeek} ${dayOfMonth}${daySuffix} ${monthName}, ${year}`;
-  }
+}
+
 
   const handleReport = async (email) => {
     if (!selected) {
@@ -99,12 +145,13 @@ const EventElement = ({ data, isfirst }) => {
     }
     try {
       
+      
     
     const response = await fetch ('https://express-linux-970266916925.us-east1.run.app/submitreport', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-firebase-appcheck': token,
+        
       },
       body: JSON.stringify({
         masjid: data.mosque,
@@ -302,11 +349,15 @@ const EventElement = ({ data, isfirst }) => {
           </Dialog.Content>
           <Dialog.Actions>
               <View style = {{flexDirection: 'row', justifyContent: 'center', width: '100%', height: 44, marginTop: 5, }}>
-                <Button  style = {{width: 156, height: '100%', borderRadius: 100, marginRight: 9}} buttonColor = '#0D6CFC' mode = 'contained' onPress={() => setReportVisible(false)}>Cancel</Button>
+                <Button  style = {{width: 156, height: '100%', borderRadius: 100, marginRight: 9}} buttonColor = '#0D6CFC' mode = 'contained' onPress={() => setReportVisible(false)}><Text style = {{color: 'white'}}>Cancel</Text></Button>
                 <Button style = {{width: 156, height: '100%', borderRadius: 100,}} buttonColor = '#FF5B47' mode = 'contained' 
                 icon = {() => <AntDesign name = 'exclamationcircleo' size = {23} color = 'white'/>} onPress = {async () =>  {
+                  try {
+                    
+                    setLoading(true);
                   let stored = await AsyncStorage.getItem('email');
                   if (!stored) {
+                    if (Platform.OS === 'ios') {
                   Alert.prompt('Please enter your email to submit with the report', 'This info will not be shared', async (email) => {
                     if (!email) {
                       Alert.alert('Error', 'Please enter an email to submit the report');
@@ -317,12 +368,23 @@ const EventElement = ({ data, isfirst }) => {
                   
                   });
                 } else {
+                  setADialog((prev) => ({
+                    ...prev,
+                    visible: true,
+                  }));
+                }
+                } else {
                   await handleReport(stored);
                 }
+              } catch (e) {
+                throw e;
+              } finally {
                   
                   setVisible(false);
-                  setReportVisible(true)
-                  }}><Text style = {{fontWeight: 800,}}>Report</Text></Button>
+                  setReportVisible(false);
+                  setLoading(false);
+              }
+                  }}><Text style = {{fontWeight: 'bold', color: 'white'}}>Report</Text></Button>
               </View>
             </Dialog.Actions>
             

@@ -5,11 +5,11 @@ import AltTable from './nextchangetable';
 
 const PrayerTable = ({ data, nextPrayer, onRowPress }) => {
     const [current, setCurrent] = useState(true);
-    const filter = (name) => {
-        if (name.length > 4) {
-            return;
-        }
-    }
+    // const filter = (name) => {
+    //     if (name.length > 4) {
+    //         return;
+    //     }
+    // }
     
     const styles = StyleSheet.create({
         center : {

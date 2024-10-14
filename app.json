@@ -2,7 +2,7 @@
   "expo": {
     "name": "Halaqah",
     "slug": "HalaqahApp",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/applogo.png",
     "userInterfaceStyle": "automatic",
@@ -14,11 +14,16 @@
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": false,
-      "bundleIdentifier": "com.Ibrahim.masjid"
+      "infoPlist": {
+        "UIDeviceFamily": [1]
+      },
+      "bundleIdentifier": "com.Ibrahim.masjid",
+      
     },
     "android": {
       "googleServicesFile": "./google-services.json",
       "package": "com.Ibrahim.masjid",
+      
       "adaptiveIcon": {
         "foregroundImage": "./assets/applogo.png",
         "backgroundColor": "#ffffff"

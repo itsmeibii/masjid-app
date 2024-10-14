@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, Image , TouchableOpacity, TouchableHighlight} from 'react-native';
+
+
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import Home from './(app)/Home';
 import Event from './(app)/Event';
@@ -19,7 +19,7 @@ import { useFonts } from 'expo-font';
 
 import ErrorBoundary from './components/ErrorBoundary';
 
-
+import Toast from 'react-native-toast-message';
 
 
 
@@ -29,31 +29,17 @@ const Stack = createNativeStackNavigator();
 
 
 function MainNav() {
- const {name, setName, modal} = useModal();
   
-  const styles = StyleSheet.create({
-    icon: {
-      borderRadius: 50,
-    },
-      tabBar: {
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-
-          overflow: "hidden",
-          backgroundColor: '#fff',
-      }
-  });
+ 
+  
+  
     
 
   return (
       <Tab.Navigator
 
           screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused, color, size }) => {
+              tabBarIcon: ({ focused,_, size }) => {
                   
                 if (route.name === 'Home') {
                   return <AntDesign name = 'home' color = {focused ? 'blue' : 'black'} size = {size} /> 
@@ -109,7 +95,7 @@ export default function App() {
       </NavigationContainer>
       </ModalProvider>
       </PaperProvider>
-      
+      <Toast />
       </ErrorBoundary>
 
     

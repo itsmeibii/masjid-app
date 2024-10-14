@@ -1,13 +1,11 @@
-import { StyleSheet, Text, View, TextInput, Animated, Easing, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TextInput, Animated, Easing, TouchableOpacity } from 'react-native'
 import React, {useState, useRef} from 'react'
 import Feather from '@expo/vector-icons/Feather';
 import { Menu } from 'react-native-paper';
-import { useModal } from '../context/AuthContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Picker, Switch} from 'react-native-ui-lib';
 
-const EventSearch = ({setValue, value, past, setSearchQuery}) => {
-    const [focused, setFocused] = useState(false);
+
+const EventSearch = ({setValue,  setSearchQuery}) => {
+    
     const rotation = useRef(new Animated.Value(0)).current;  // Animated value for rotation
     
     const [visible, setVisible] = useState(false);

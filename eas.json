@@ -6,7 +6,11 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+      
     },
     "development-simulator": {
       "developmentClient": true,
@@ -19,7 +23,10 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "android": {
+        "buildType": "app-bundle"
+      }
     }
   },
   "submit": {
@@ -28,9 +35,6 @@
         "appleId":"ihusain72@gmail.com",
         "ascAppId": "6714452420",
         "appleTeamId": "7FJW6726D9"
-
-
-
       }
     }
   }

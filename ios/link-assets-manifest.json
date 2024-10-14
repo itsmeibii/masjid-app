@@ -1,0 +1,37 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Beiruti.ttf",
+      "sha1": "321150057def36339df933a19ae6411f37225d2d"
+    },
+    {
+      "path": "assets/fonts/Roboto Mono.ttf",
+      "sha1": "482fe6d50836d6dabe77d2810248e5dfb4f093e0"
+    },
+    {
+      "path": "assets/fonts/RobotoFlex-BOLD.ttf",
+      "sha1": "300b1abe4bde83192ae7bb1c389c7dea56cf55f8"
+    },
+    {
+      "path": "assets/fonts/RobotoFlex-EL.ttf",
+      "sha1": "59987621fe1c144b148705ea8f2e75cfd47ed828"
+    },
+    {
+      "path": "assets/fonts/RobotoFlex-MED.ttf",
+      "sha1": "aaaf5bdbbfac973ec3dd5b9b838b42f76e3d1002"
+    },
+    {
+      "path": "assets/fonts/RobotoFlex-REG.ttf",
+      "sha1": "47e34bfccde60a226edd12a832d01990a7337e02"
+    },
+    {
+      "path": "assets/fonts/RobotoFlex-SB.ttf",
+      "sha1": "4185c49c9f8e4ae9185d6f9992f8dde6a5600a0c"
+    },
+    {
+      "path": "assets/fonts/RobotoFlex.ttf",
+      "sha1": "af7cf633cb6063b2f1e8dd7ce9054f4264af4a76"
+    }
+  ]
+}

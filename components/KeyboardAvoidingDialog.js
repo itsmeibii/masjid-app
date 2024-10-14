@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Platform, Keyboard } from 'react-native';
+import {Platform, Keyboard } from 'react-native';
 import React from 'react';
 import { Dialog } from 'react-native-paper';
 

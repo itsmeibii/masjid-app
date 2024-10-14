@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native'
 import React from 'react'
 import Prayer from './Prayer'
 
@@ -22,6 +22,6 @@ const PrayerList = ({data, onRowPress}) => {
 
 export default PrayerList
 
-const styles = StyleSheet.create({})
+
 
 // <FlatList data={data} renderItem={renderItem} keyExtractor={keyExtractor} style = {{width: '100%'}} contentContainerStyle = {{alignItems: 'center', width: '100%'}} />
