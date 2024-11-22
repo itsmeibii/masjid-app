@@ -15,7 +15,7 @@ import EventSearch from './EventSearch';
 //     SCC: '#656d4a',
 // };
 
-const EventTable = ({ events, prayerData }) => {
+const EventTable = ({ events, prayerData, colors }) => {
     const [sorted, setSorted] = useState([]);
     const [unsorted, setUnsorted] = useState([]);
     const [value, setValue] = useState('Time');
@@ -67,16 +67,7 @@ const EventTable = ({ events, prayerData }) => {
         return date instanceof Date && !isNaN(date);
     }
 
-    const colors = {
-        GIC: '#ffc300',
-        HIC: 'rgb(109,180,156)',
-        RCM: 'rgb(63,7,131)',
-        ICNF: 'rgb(201,205,68)',
-        ARCC: 'rgb(88,193,205)',
-        YCC: '#f4acb7',
-        MAZ: '#003566',
-        SCC: '#656d4a',
-    };
+    
 
     const renderItem = ({ item, index }) => {
         const isfirst = index > 0 && data[index - 1].dateObj !== null && item.dateObj === null && value === 'Time';
@@ -165,23 +156,25 @@ const EventTable = ({ events, prayerData }) => {
   
     useEffect(() => {
         if (events) {
+          
             let newUnsortedData = [];
             
             for (let [key, value] of Object.entries(events)) {
                 let copy = value.map((entry, index) => {
-                    let obj = entry.data;
+                    
+                    
                     let date = null;
                     let timeString, params;
     
-                    if (isValidDate(new Date(obj.date.trim()))) {
+                    if (isValidDate(new Date(entry.date.trim()))) {
                       
-                        let time = formatTimeString(obj.time.trim());
+                        let time = formatTimeString(entry.time.trim());
                         if (typeof time === 'string') {
-                            let param = `${obj.date.trim()}T${convertTo24(time.trim())}`.trim();
+                            let param = `${entry.date.trim()}T${convertTo24(time.trim())}`.trim();
                             date = new Date(param);
                         } else if (time) {
                             timeString = getPrayer(key.substring(6), time.prayer);
-                            params = `${obj.date.trim()}T${convertTo24(formatTimeString(timeString.trim())).trim()}`.trim();
+                            params = `${entry.date.trim()}T${convertTo24(formatTimeString(timeString.trim())).trim()}`.trim();
                             date = new Date(params);
                         }
                         
@@ -191,7 +184,7 @@ const EventTable = ({ events, prayerData }) => {
                         ...entry,
                         color: colors[key.substring(6)],
                         mosque: key.substring(6),
-                        uniqueIdentifier: `${key}-${index}-${entry.data.date}`,
+                        uniqueIdentifier: `${key}-${index}-${entry.date}`,
                         dateObj: date,
                     };
                 });
@@ -211,7 +204,9 @@ const EventTable = ({ events, prayerData }) => {
             });
     
             setSorted(newSortedData);
+            
         }
+        
     }, [events]);
     
 

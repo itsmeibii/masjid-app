@@ -4,7 +4,14 @@ import { BlurView } from 'expo-blur';
 import { useModal } from '../context/AuthContext';
 import Arrow from 'react-native-vector-icons/AntDesign';
 
+
 const MosqueCard = ({mosqueData, onPress}) => {
+  if (!mosqueData) {
+    return null;
+  }
+  const {nextPrayer} = useModal();
+  const [remainingTime, setRemainingTime] = React.useState(timeUntil(nextPrayer.Time));
+
   function timeUntil(timeString) {
     const now = new Date(); // Get current date and time
   
@@ -57,12 +64,28 @@ const MosqueCard = ({mosqueData, onPress}) => {
   }
   
   {/* intensity: 32 */}
+  React.useEffect(() => {
+    
+    // Calculate the delay to the next full minute
+    const delay = (60 - new Date().getSeconds()) * 1000;
+
+    // Set a timeout to first run the function at the start of the next minute
+    const timeoutId = setTimeout(() => {
+      
+      setRemainingTime(timeUntil(nextPrayer.Time));
+      
+      // Then, set up the interval to run every minute after the first execution
+      setInterval((() => setRemainingTime(timeUntil(nextPrayer.Time))), 60000);
+    }, delay);
+
+    // Cleanup timeout and interval when the component unmounts
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []); 
   
   
-  const {nextPrayer} = useModal();
-  if (!mosqueData) {
-    return null;
-  }
+
   
   return (
     <TouchableOpacity onPress = {() => onPress()} activeOpacity={0.5} style = {{width: '100%', alignItems: 'center'}}>
@@ -84,7 +107,7 @@ const MosqueCard = ({mosqueData, onPress}) => {
         <BlurView intensity={Platform.OS === 'ios' ? 32 : 100} style = {{width: '100%', flex: 1, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.12)', justifyContent: 'center', alignItems: 'center' }} >
           <Text style = {{fontFamily: 'RobotoFlexSB', fontSize: 13, color: 'white', marginBottom: 8}}>{nextPrayer.Time}</Text>
           <View style = {{alignItems: 'center'}}>
-          <Text style = {{fontFamiyl: 'RobotoFlexMED', fontSize: 10, color: 'white', textAlign: 'center' }}>{timeUntil(nextPrayer.Time)}</Text>
+          <Text style = {{fontFamiyl: 'RobotoFlexMED', fontSize: 10, color: 'white', textAlign: 'center' }}>{remainingTime}</Text>
           </View>
         </BlurView>
         </View>

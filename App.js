@@ -20,6 +20,8 @@ import { useFonts } from 'expo-font';
 import ErrorBoundary from './components/ErrorBoundary';
 
 import Toast from 'react-native-toast-message';
+import TabBar from './components/TabBar';
+import Qibla from './(app)/Qibla';
 
 
 
@@ -33,28 +35,28 @@ function MainNav() {
  
   
   
-    
+  // if (route.name === 'Home') {
+  //   return <AntDesign name = 'home' color = {focused ? 'blue' : 'black'} size = {size} /> 
+  // } else {
+  //   return <Ionicons name = 'calendar-outline' color = {focused ? 'blue' : 'black'} size = {size} />
+  // }
 
   return (
       <Tab.Navigator
 
-          screenOptions={({ route }) => ({
-              tabBarIcon: ({ focused,_, size }) => {
-                  
-                if (route.name === 'Home') {
-                  return <AntDesign name = 'home' color = {focused ? 'blue' : 'black'} size = {size} /> 
-                } else {
-                  return <Ionicons name = 'calendar-outline' color = {focused ? 'blue' : 'black'} size = {size} />
-                }
-              },
+          screenOptions={{
+              
               
               //calendar-outline Ionicons
               //home antdesign
-              
+              gestureEnabled: true, 
+              animationEnabled: true, 
               lazy: false,
               headerShown: false,
-          })}
+          }}
           initialRouteName='Home'
+          tabBar={(props) => <TabBar {...props} 
+          />}
       >
       <Tab.Screen
         name='Home'
@@ -67,6 +69,12 @@ function MainNav() {
         component={Event}
         options={{ title: 'My Events' }}
       />
+      <Tab.Screen
+        name = 'Qibla'
+        component = {Qibla}
+        options = {{title: 'Qibla'}}
+        />
+      
     </Tab.Navigator>
   );
 }

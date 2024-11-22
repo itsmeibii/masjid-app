@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {ActivityIndicator, Platform, SafeAreaView, View, Text,TouchableOpacity, Image, Alert, Pressable, Modal, TextInput, ToastAndroid, } from 'react-native'
+import {ActivityIndicator, Platform, SafeAreaView, View, Text,TouchableOpacity,Linking, Image, Alert, Pressable, Modal, TextInput, ToastAndroid, } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MosqueInfo from './MosqueInfo';
 import HijriJS from '../assets/Hijri';
@@ -17,6 +17,8 @@ import AndroidDialog from 'react-native-dialog';
 import * as Location from 'expo-location';
 import DeviceInfo from 'react-native-device-info';
 import Toast from 'react-native-toast-message';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import AthanCard from '../components/AthanCard';
 
 
 
@@ -28,9 +30,9 @@ import Toast from 'react-native-toast-message';
 
 export default function Home()
 {   
-  let userLocation;
+  let userLocation, insets = useSafeAreaInsets();
    const [feedback, setFeedback] = useState('');
-    const {setLocation,  name, setName, location, mosqueData, nextPrayer, getAllCollections } = useModal()
+    const {setLocation,  name, setName, location, mosqueData, nextPrayer, getAllCollections, athanData } = useModal()
     const [email, setEmail] = useState('')
     const [rating, setRating] = useState(3);
     const [loading, setLoading] = useState({feedbackLoading: false, qiblaLoading: false});
@@ -40,18 +42,21 @@ export default function Home()
     const [selectedMosque, setSelectedMosque] = useState(null);
     const [qiblaModal, setQiblaModal] = useState(false);
     const [aDialog, setADialog] = useState({visible: false, name: '', loc: {visible: false, message: '', title: ''}});
+    
     let bar = 'dark'
     
     useEffect(() => {
       if (mosqueData && mosqueData.length > 0) {
         setSelectedMosque(mosqueData[0]); // Set the initial mosque when data is available
+        
+        
       }
     }, [mosqueData]);
     
 
   useEffect(() => {
     
-    getAllCollections();
+    
     const showToast = () => {
       Toast.show({
         type: 'error',
@@ -67,7 +72,16 @@ export default function Home()
       showToast();
     }
   },[])
-  
+    async function handleEmail () {
+      Linking.canOpenURL(`mailto:ibrahim.irfan12341@outlook.com`).then(supported => {
+        if (supported) {
+          Linking.openURL(`mailto:ibrahim.irfan12341@outlook.com`);
+        } else {
+          Alert.alert('An Error Occured', 'Unable to open email client');
+        }
+      }).catch(_ => {Alert.alert('An Error Occured', 'Something went wrong')});
+      
+    }
     
     async function handleFeedback () {
       setLoading(prev => ({...prev, feedbackLoading: true}));
@@ -281,7 +295,7 @@ return (
 
   //  );
   return (
-    <SafeAreaView style = {{flex: 1, backgroundColor: 'white', alignItems: 'center', marginTop: Platform.OS !== 'ios' ? 15 : null}}>
+    <View style = {{flex: 1, backgroundColor: 'white', alignItems: 'center', paddingTop: (Platform.OS !== 'ios' ? 15 : null) + insets.top - 5}}>
              <StatusBar style={bar} />
              <Portal style = {{alignItems: 'center'}}>
              
@@ -295,7 +309,7 @@ return (
           <Dialog.Title style = {{ margin: 0,}} >
               <View style = {{alignItems: 'center', flexDirection: 'column'}}>
               <Text style = {{fontSize: 17, fontWeight: 700, textAlign: 'center'}}>How is your experience using Halaqah?</Text>
-              <Text style = {{fontSize: 13, textAlign: 'center', marginVertical: 5,}}>For inquiries regarding adding features or masjids, please contact <Text style = {{fontWeight: 'bold'}}>(470) 861-9203</Text></Text>
+              <Text style = {{fontSize: 13, textAlign: 'center', marginVertical: 5,}}>For inquiries regarding adding features or masjids, please email <Pressable onPress = {handleEmail} ><Text style = {{fontWeight: 'bold', textDecorationLine: 'underline', top: 2.5,}}>ibrahim.irfan12341@outlook.com</Text></Pressable></Text>
               </View>
             </Dialog.Title>
             <Dialog.Content style = {{width: '100%', margin: 0,}}>
@@ -444,38 +458,13 @@ return (
           </View>
          
       </View>
-      <MosqueCard  mosqueData = {mosqueData[0]} onPress = {() => setMosqueModal(true)}/>
-      <PrayerList data = {mosqueData} style = {{width: '100%'}}onRowPress = {(index) => {
+      <AthanCard athanData = {athanData} />
+      <PrayerList data = {mosqueData} style = {{width: '100%'}} onRowPress = {(index) => {
         
           setSelectedMosque(mosqueData[index]);
           setMosqueModal(true);
         }}/>
-      <TouchableOpacity onPress = { async () =>  {
-        await handleOpenQiblaFinder();
-      }}>
-        <View style = {{position: 'absolute', height: 70, width: 70, borderRadius: 35, backgroundColor: '#D9ED92', justifyContent: 'center', alignItems: 'center', bottom: 10, left: 110,
-            ...Platform.select({
-              android: {
-                  elevation: 5,
-              },
-              ios: {
-                  shadowColor: '#89d99e',
-                  shadowOffset: { width: 0, height: 0},
-                  shadowOpacity: 0.8,
-                  shadowRadius: 9,
-              },
-             
-            })
-          }}>
-        {loading.qiblaLoading ? (
-            <ActivityIndicator size = 'small' color = 'white' />
-        ): (
-          
-              <Image source  = {require('../assets/kaabah.png')} style = {{height: 45, width: 45,}} />
-          
-        )}
-       </View>
-      </TouchableOpacity>
-    </SafeAreaView>
+      
+    </View>
   )
 }

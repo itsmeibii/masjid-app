@@ -2,7 +2,7 @@
   "expo": {
     "name": "Halaqah",
     "slug": "HalaqahApp",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/applogo.png",
     "userInterfaceStyle": "automatic",
@@ -17,7 +17,7 @@
       "infoPlist": {
         "UIDeviceFamily": [1]
       },
-      "bundleIdentifier": "com.Ibrahim.masjid",
+      "bundleIdentifier": "com.Ibrahim.masjid"
       
     },
     "android": {
@@ -29,18 +29,7 @@
         "backgroundColor": "#ffffff"
       }
     },
-    "plugins": [
-      "@react-native-firebase/app",
-      "@react-native-firebase/app-check",
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "useFrameworks": "static"
-          }
-        }
-      ]
-    ],
+    
     "web": {
       "favicon": "./assets/favicon.png"
     },

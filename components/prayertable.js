@@ -49,7 +49,7 @@ const PrayerTable = ({ data, nextPrayer, onRowPress }) => {
 
     useEffect(() => {
         setPage(0);
-    }, [itemsPerPage]);
+}, [itemsPerPage]);
 
     function removeLetters(timeString) {
        let replace = timeString.replace(/[a-zA-Z]/g, '').trim();

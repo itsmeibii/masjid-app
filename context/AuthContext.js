@@ -270,6 +270,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
  // Assuming you have a sorter function in your components
 import getNextPrayer from '../components/getNextPrayer';
+import { Image } from 'react-native';
 
 // import init from '../assets/firebase'
 // import { firebase } from '@react-native-firebase/app';
@@ -293,6 +294,7 @@ export const ModalProvider = ({ children }) => {
   const [name, setName] = useState('');
   const [location, setLocation] = useState(undefined);
   const [mosqueData, setMosqueData] = useState(null); // Initialize to null
+  const [athanData, setAthanData] = useState(null);
   const [isAppReady, setIsAppReady] = useState(false); // Track if the app is ready
   const [nextPrayer, setNextPrayer] = useState(null);
   const [events, setEvents] = useState(null);
@@ -350,20 +352,25 @@ export const ModalProvider = ({ children }) => {
     return totalMinutes;
 }
   async function getTimes(loc, mdata) {
-    let copy = mdata;
+    let copy  = mdata;
     if (loc) {
-      const { latitude, longitude } = loc;
+      const { latitude: lat, longitude: lng } = loc;
       const params = new URLSearchParams({
-        lat: latitude,
-        lng: longitude
+        lat,
+        lng,
       });
-
+    
+      //fix drivertime once athan is added
       const data = await fetch(`https://express-linux-970266916925.us-east1.run.app/drivetime?${params.toString()}`);
       const response = await data.json();
-
+      
+      if (!response.length) {
+        return null;
+      }
       for (let mosque in response) {
         copy[mosque] = { ...mdata[mosque], ...response[mosque] };
       }
+      
       return copy;
     }
     return null;
@@ -432,6 +439,36 @@ export const ModalProvider = ({ children }) => {
       return null;
     }
   };
+  async function Startup({lat,lng}) {
+    try {
+      
+      let end = lat && lng ? `?lat=${lat}&lng=${lng}` : '';
+      let response = await fetch(`http://localhost:8080/startup${end}`);
+      if (response.status == 503) {
+        throw new Error('down');
+      }
+      let data = await response.json();
+      
+      setMosqueData(data.mosques);
+      
+      data.mosques.forEach(mosque => {
+        Image.prefetch(mosque.imageURL);
+        
+      })
+      data.athan = {Fajr: '6:01 AM', Zuhr: '12:22 PM', Asr: '3:13 PM', Maghrib: '5:33 PM', Isha: '6:45 PM'};
+      setAthanData(data.athan);
+      let eventsres = data.events;
+      for (let key in eventsres) {
+        if (Array.isArray(eventsres[key]) && eventsres[key].length > 0) {
+          eventsres[key].shift();
+        }
+      }
+      setEvents(eventsres);
+
+    } catch (e) {
+      throw e;
+    }
+  }
 
   const startApp = async () => {
     try {
@@ -450,9 +487,10 @@ export const ModalProvider = ({ children }) => {
       await initialize();
       
 
-      // Get the sorted mosques using the location and token
-      const obj = await getSortedMosques(locationResult);
-      setMosqueData(obj);
+      //gets the mosque data
+      // const obj = await getSortedMosques(locationResult);
+      // setMosqueData(obj);
+      await Startup(locationResult);
       
       
 
@@ -523,7 +561,7 @@ export const ModalProvider = ({ children }) => {
   return (
     <ModalContext.Provider value={{
        events, getAllCollections, modal, setModal,
-      name, setName, location, mosqueData, isAppReady, startApp, nextPrayer, setNextPrayer, getNextPrayer, setLocation, 
+      name, setName, location, mosqueData, isAppReady, startApp, nextPrayer, setNextPrayer, getNextPrayer, setLocation, athanData
     }}>
       {children}
     </ModalContext.Provider>

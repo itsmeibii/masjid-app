@@ -9,7 +9,7 @@ import AndroidDialog from 'react-native-dialog'
 import { useModal } from '../context/AuthContext';
 
 
-const EventElement = ({ data, isfirst }) => {
+const EventElement = ({isfirst, data}) => {
   
   let eventName, location, time, date, extraInfo;
   
@@ -18,6 +18,7 @@ const EventElement = ({ data, isfirst }) => {
   const [visible, setVisible] = useState(false);
   const [reportVisible, setReportVisible] = useState(false);
   const [selected, setSelected] = useState('');
+  const [today, setToday] = useState(false);
   const abrs = {GIC: 'Gwinnett Islamic Center', HIC: 'Hamzah Islamic Center', RCM: 'Roswell Community Masjid', ICNF: 'Islamic Center of North Fulton'};
   const [reasons] = useState([
     {key: '1', value: 'False Content'},
@@ -35,7 +36,7 @@ const EventElement = ({ data, isfirst }) => {
     }
   };
   function truncateString(str) {
-    if (str.length > 40) {
+    if (str.length > 30) {
       return str.slice(0, 50 - 3).trim() + '...';
     }
     return str;
@@ -48,11 +49,26 @@ const EventElement = ({ data, isfirst }) => {
         .join(' '); // Join the words back into a string
 }
 
-  if (data?.id !== '0' && data?.data?.eventName) {
-    ({ location, time, date, eventName, extraInfo } = data.data ?? {});
+  if (data?.id !== '0' && data?.eventName) {
+    ({ location, time, date, eventName, extraInfo } = data ?? {});
     
     
   }
+  React.useEffect(() => {
+    if (date) {
+      
+      const dmy = date.split('-');
+      const today = new Date();
+      const isToday = (
+        today.getDate() === parseInt(dmy[2]) &&
+        today.getMonth() + 1 === parseInt(dmy[1]) &&
+        today.getFullYear() === parseInt(dmy[0])
+      )
+
+      
+      setToday(isToday);
+    }
+  }, [date]);
   
 
   
@@ -103,6 +119,7 @@ const EventElement = ({ data, isfirst }) => {
     if (isNaN(date)) {
       return 'No Date Specified';
     }
+    
 
     function getDaySuffix(day) {
       if (day > 3 && day < 21) return 'th'; // Covers 11th-19th
@@ -212,7 +229,14 @@ const EventElement = ({ data, isfirst }) => {
             
           
             <Dialog.Title style = {{fontSize: 23, color: 'rgb(51,51,51)', textAlign: 'center', fontWeight: 700}}>{capitalize(eventName)}</Dialog.Title>
-            
+            <Dialog.Title style = {{fontSize: 15, textAlign: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                <View style = {{height: 15, width: 15, borderRadius: 7.5, backgroundColor: data.color, marginHorizontal: 5,}} />
+                
+                <Text>Event announced by:</Text>
+                <View>
+                <Text style = {{fontWeight: 'bold', color: data.color, fontSize: 18, top: 4.5,}}>  {data.mosque}</Text>
+                </View>
+            </Dialog.Title>
               <View style = {{height: 296, width: 321, marginTop: 16, justifyContent: 'space-between'}}>
                   <View style = {{height: 88, width: '100%', borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(0,0,0,0.12)'}}>
                     <Entypo name = 'location' size = {36} color = 'black' style = {{margin: 10,}} />
@@ -243,18 +267,18 @@ const EventElement = ({ data, isfirst }) => {
                     
 
                   </View>
-                  <View style = {{height: 88, width: '100%', borderRadius: 12, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(0,0,0,0.12)'}}>
+                  <View style = {{ width: '100%', borderRadius: 12, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(0,0,0,0.12)'}}>
                     <Feather name = 'info' size = {36} color = 'black' style = {{margin: 10,}} />
-                    <View style = {{flex: 1, height: '80%', justifyContent: 'space-around', }}>
-                      <Text style = {{fontWeight: 600, fontSize: 17}}>Extra Information</Text>
-                      <Text style = {{fontSize: 14, fontWeight: 300,  textAlign: 'left', color: 'rgba(51,51,51,0.64)', marginBottom: 3,}}> {extraInfo.trim()}</Text>
+                    <View style = {{flex: 1, justifyContent: 'center' }}>
+                      <Text style = {{fontWeight: 600, fontSize: 17, marginVertical: 4}}>Extra Information</Text>
+                      <Text style = {{fontSize: 14, fontWeight: 300,  textAlign: 'left', color: 'rgba(51,51,51,0.64)', marginBottom: 5}}> {extraInfo.trim()}</Text>
                     </View>
                   </View>
               </View>
             
             <Dialog.Actions>
               <View style = {{flexDirection: 'row', justifyContent: 'center', width: '100%', height: 44, marginTop: 30,}}>
-                <Button  style = {{width: 156, height: '100%', borderRadius: 100, marginRight: 9}} buttonColor = '#0D6CFC' mode = 'contained' onPress={() => setVisible(false)}>Close</Button>
+                <Button  style = {{width: 156, height: '100%', borderRadius: 100, marginRight: 9}} buttonColor = '#0D6CFC' mode = 'contained' onPress={() => setVisible(false)} {...(Platform.OS == 'ios' && {color: 'white'})}>Close</Button>
                 <Button style = {{width: 156, height: '100%', borderRadius: 100,}} buttonColor = '#FF5B47' mode = 'contained' 
                 icon = {() => <AntDesign name = 'exclamationcircleo' size = {23} color = 'white'/>} onPress = {() =>  {
                   setVisible(false);
@@ -425,18 +449,18 @@ const EventElement = ({ data, isfirst }) => {
                   </AndroidDialog.Container>
                 </View>
                  ) : null}
-          <View style = {{width: 353,  height: 120, overflow: 'auto',    flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', borderRadius: 12, marginVertical: 4, 
+          <View style = {[{width: 353,  height: 140, overflow: 'auto',    flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', borderRadius: 12, marginVertical: 4, borderWidth: today && 1, borderColor: data.color, 
             ...Platform.select({
               ios: {
-                shadowColor: 'black',
+                shadowColor: today ? data.color : 'black',
                 shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.12,
-                shadowRadius: 5,
+                shadowOpacity: today ? 0.42 : 0.12,
+                shadowRadius: 10,
               },
               android: {
                 elevation: 5,
               },
-            })}}>
+            })}, {borderRightWidth: 10, borderRightColor: data.color}]}>
               <View style = {{height: 80, width: 100, backgroundColor: '#FBFBFB', alignItems: 'center', justifyContent: 'center', borderRadius: 12, marginLeft: 8}}>
               <Entypo name = 'location' size = {16} />
              <Text style = {{fontSize: 11, textAlign: 'center',  marginTop: 4,}}>{formatLoc(location)}</Text>
